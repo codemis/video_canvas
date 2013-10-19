@@ -7,7 +7,7 @@ Videocanvas::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'pages#home'
-
+  get '/annotation' => 'pages#annotation', as: :annotation
   put '/create_guest_user' => 'users#create_guest_user', as: :create_guest_user
 
   # Example of regular route:
