@@ -36,12 +36,12 @@ function addScribbleAnnotation() {
 	var uuid = addNewObjectToCurrentAnnotations('canvas', {'isDrawing': false});
 	var canvas = $('<canvas/>').attr({'data-uuid': uuid}).addClass('scribbleAnnotation');
 	// var canvasContext = canvas.getContext('2d');
-	var widget = getDialogFrame(canvas);
-	$('body').append(widget);
-	widget.dialog({'height': dialogStartingDimensions['h'], width: dialogStartingDimensions['w'], 'resizeStop': function(event, ui){
+	var canvasDialog = getDialogFrame(canvas);
+	$('body').append(canvasDialog);
+	canvasDialog.dialog({'height': dialogStartingDimensions['h'], width: dialogStartingDimensions['w'], 'resizeStop': function(event, ui){
 		resizeCanvas($(this).find('.content'));
 	}});
-	resizeCanvas(widget.find('.content'));
+	resizeCanvas(canvasDialog.find('.content'));
 };
 /*
  * Adds the newObject details to the currentAnnotations var
