@@ -2,12 +2,12 @@ require 'base64'
 
 class AnnotationsController < ApplicationController
 
-	before_filter :set_canvas_data, only: :create
+	before_filter :set_canvas_data, only: [:create, :update]
 	
 	# POST /annotations
 	#
 	def create
-		# TODO Remp code needs cleaning up
+		# TODO Temp code needs cleaning up
 		passed_params = annotation_params
 		passed_params[:user] = User.first
 		passed_params[:video] = Video.first
@@ -26,6 +26,29 @@ class AnnotationsController < ApplicationController
 				format.json { render json: {error: true, message: @message} }
 			end
 		end
+	end
+
+	# PATCH /annotations/:id
+	#
+	def update
+		@annotation = Annotation.find(params[:id])
+
+		respond_to do |format|
+			passed_params = annotation_params
+			passed_params[:user] = User.first
+			passed_params[:video] = Video.first
+			if @annotation.update_attributes(passed_params)
+				unless @canvas_data.nil?
+					unless @annotation.save_canvas_image(@canvas_data)
+						format.json { render json: {error: true, message: "Unable to save the file."} }	
+					end
+				end
+				format.json { render json: @annotation, status: :created, location: @annotation }
+			else
+				@message = @annotation.errors.empty? ? "Your Annotation has not been saved" : "Your Annotation has not been saved because: " + @annotation.errors.full_messages.to_sentence
+				format.json { render json: {error: true, message: @message} }
+			end
+		end		
 	end
 
 	def image_data
