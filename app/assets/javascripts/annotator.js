@@ -24,6 +24,7 @@ var annotationsURL = "";
  *
  */
 var getImageDataURL = "";
+var pinHTML = "<button class='pin'>/</button>";
 /*
  * Document is ready
  *
@@ -101,6 +102,11 @@ function addNewScribbleAnnotation() {
 			});
 		};
 	}});
+	var titleBar = canvasDialog.parents('.ui-dialog').find('.ui-dialog-titlebar');
+	$(pinHTML).appendTo(titleBar).click(function(event) {
+		togglePinSlider($(this));
+	});
+	
 	resizeCanvas(canvasDialog.find('.content'));
 };
 /*
@@ -266,6 +272,15 @@ function getDialogPosition(dialog) {
 				width: dialog.width(), 
 				height: dialog.height()
 			};
+};
+function togglePinSlider(pin) {
+	if (pin.attr('data-showing') == 'YES') {
+		$(pin).attr('data-showing', 'NO');
+		$(pin).addClass('unpinned').removeClass('pinned');
+	} else {
+		$(pin).attr('data-showing', 'YES');
+		$(pin).addClass('pinned').removeClass('unpinned');
+	};
 };
 /*
  * Creates a unique id
