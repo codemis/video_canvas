@@ -6,7 +6,7 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: hidine_development
+  database: rails_rumble_13_development
   pool: 5
   username: Mac
   password:
@@ -18,14 +18,9 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
-  database: hidine_development
+  database: rails_rumble_13_test
   pool: 5
   username: Mac
   password:
   host: localhost
 
-production:
-  adapter: postgresql
-  database: db/production.sqlite3
-  pool: 5
-  timeout: 5000
