@@ -10,6 +10,11 @@ var currentAnnotations = {};
  */
 var dialogStartingDimensions = {'h': 300, 'w': 300};
 /*
+ * @param Hash Table Stores the settings for the Canvas writing tools
+ *
+ */
+var canvasSettings = {'stroke': 3, 'color': 'blue'};
+/*
  * Document is ready
  *
  */
@@ -34,8 +39,43 @@ function getDialogFrame(content) {
  */
 function addScribbleAnnotation() {
 	var uuid = addNewObjectToCurrentAnnotations('canvas', {'isDrawing': false});
-	var canvas = $('<canvas/>').attr({'data-uuid': uuid}).addClass('scribbleAnnotation');
-	// var canvasContext = canvas.getContext('2d');
+	var canvas = $('<canvas/>').attr({'data-uuid': uuid}).addClass('scribbleAnnotation').css({'cursor': 'pointer'});
+	var canvasContext = canvas[0].getContext('2d');
+	/*
+	 * Handle the canvas' mouse events
+	 *
+	 */
+	canvas.mouseup(function(event) {
+		var eleUUID = $(this).data('uuid');
+		currentAnnotations[eleUUID]['options']['isDrawing'] = false;
+		return false;
+	});
+	canvas.mouseout(function(event) {
+		var eleUUID = $(this).data('uuid');
+		currentAnnotations[eleUUID]['options']['isDrawing'] = false;
+		return false;
+	});
+	canvas.mousedown(function(event) {
+		var ele = $(this);
+		var eleUUID = ele.data('uuid');
+		currentAnnotations[eleUUID]['options']['isDrawing'] = true;
+		var canvasOffset = ele.offset();
+		canvasContext.beginPath();
+		canvasContext.moveTo(event.pageX - canvasOffset.left, event.pageY - canvasOffset.top);
+		return false;
+	});
+	canvas.mousemove(function(event) {
+		var ele = $(this);
+		var eleUUID = ele.data('uuid');
+		if(currentAnnotations[eleUUID]['options']['isDrawing'] === true){
+			var canvasOffset = ele.offset();
+			canvasContext.lineTo(event.pageX - canvasOffset.left, event.pageY - canvasOffset.top);
+			canvasContext.lineWidth = canvasSettings['stroke'];
+			canvasContext.strokeStyle = canvasSettings['color'];
+			canvasContext.stroke();
+		}
+		return false;
+	});
 	var canvasDialog = getDialogFrame(canvas);
 	$('body').append(canvasDialog);
 	canvasDialog.dialog({'height': dialogStartingDimensions['h'], width: dialogStartingDimensions['w'], 'resizeStop': function(event, ui){
