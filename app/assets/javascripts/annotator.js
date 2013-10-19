@@ -14,6 +14,10 @@ var dialogStartingDimensions = {'h': 300, 'w': 300};
  *
  */
 var canvasSettings = {'stroke': 3, 'color': 'blue'};
+/*
+ * @param String The URL for saving a canvas image
+ *
+ */
 var saveCanvasImageURL = "";
 /*
  * Document is ready
@@ -50,11 +54,13 @@ function addScribbleAnnotation() {
 	 *
 	 */
 	canvas.mouseup(function(event) {
-		var eleUUID = $(this).data('uuid');
-		var canvasData = $(this)[0].toDataURL("image/png");
+		var ele = $(this);
+		var eleUUID = ele.data('uuid');
+		var dialogPosition = getDialogPosition(ele.parents('div.ui-dialog'));
+		var canvasData = ele[0].toDataURL("image/png");
 		currentAnnotations[eleUUID]['options']['isDrawing'] = false;
-		$.post(saveCanvasImageURL, {image_data: canvasData, annotation_type: 'canvas', uuid: eleUUID}, function(data, textStatus, xhr) {
-			console.log(data);
+		$.post(saveCanvasImageURL, {image_data: canvasData, annotation_type: 'canvas', uuid: eleUUID, position: dialogPosition}, function(data, textStatus, xhr) {
+			// We need to do something with result
 		});
 		return false;
 	});
@@ -89,6 +95,11 @@ function addScribbleAnnotation() {
 	canvasDialog.dialog({'height': dialogStartingDimensions['h'], width: dialogStartingDimensions['w'], 'resizeStop': function(event, ui){
 		resizeCanvas($(this).find('.content'));
 	}, dialogClass: 'transparent'});
+	// Positions using the params we send for the dialog
+	// positionHash = {at: 'left+'+dialogPosition['x1']+' top+'+dialogPosition['y1'], my: 'left top', of: $(document)};
+	// canvasDialog.dialog({height: dialogPosition['height'], width: dialogPosition['width'], position: positionHash, 'resizeStop': function(event, ui){
+	// 	resizeCanvas($(this).find('.content'));
+	// }, dialogClass: 'transparent'});
 	resizeCanvas(canvasDialog.find('.content'));
 };
 /*
@@ -113,6 +124,20 @@ function addNewObjectToCurrentAnnotations(typeOfAnnotation, options) {
 function resizeCanvas(contentEle) {
 	var canvasParent = contentEle.parent();
 	contentEle.children('canvas').attr({'height': canvasParent.height(), 'width': canvasParent.width()});
+};
+/*
+ * Get the positioning of the dialog for saving
+ *
+ * @param Object dialog the JQuery dialog object
+ * @return Hash Table
+ */
+function getDialogPosition(dialog) {
+	var dialogOffset = dialog.offset();
+	return {	x1: dialogOffset.left,
+				y1: dialogOffset.top, 
+				width: dialog.width(), 
+				height: dialog.height()
+			};
 };
 /*
  * Creates a unique id
