@@ -1,6 +1,16 @@
 require 'base64'
 
 class AnnotationsController < ApplicationController
+
+	def image_data
+		data = Base64.encode64(File.read(params['image_path'])).gsub("\n", '')
+		uri  = "data:image/png;base64,#{data}"
+
+		respond_to do |format|
+			format.json {render json: {image_data: uri}}
+		end
+	end
+
 	def save_image
 		new_image_path = File.join(Rails.root, 'public', 'system', 'annotations', params['uuid'] + ".png")
 		@image_data = {uuid: params['uuid'], path: new_image_path}

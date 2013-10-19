@@ -1,7 +1,8 @@
 <% content_for :footer do %>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			saveCanvasImageURL = "<%= save_image_annotation_path %>";
+			saveCanvasImageURL = "<%= annotation_save_image_path %>";
+			getImageDataURL = "<%= annotation_image_data_path %>";
 		});
 	</script>
 <% end %>

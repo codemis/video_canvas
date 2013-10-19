@@ -8,9 +8,10 @@ Videocanvas::Application.routes.draw do
   # You can have the root of your site routed with "root"
 
   root 'pages#home'
-  get '/annotation' => 'pages#annotation', as: :annotation
+  get '/annotation' => 'pages#annotation', as: :annotation_page
   put '/create_guest_user' => 'users#create_guest_user', as: :create_guest_user
-  post '/annotations/save_image' => 'annotations#save_image', as: :save_image_annotation
+  post '/annotations/save_image' => 'annotations#save_image', as: :annotation_save_image
+  get '/annotations/image_data' => 'annotations#image_data', as: :annotation_image_data
   resources :annotations
 
   # Example of regular route:
