@@ -14,6 +14,7 @@ var dialogStartingDimensions = {'h': 300, 'w': 300};
  *
  */
 var canvasSettings = {'stroke': 3, 'color': 'blue'};
+var saveCanvasImageURL = "";
 /*
  * Document is ready
  *
@@ -50,7 +51,11 @@ function addScribbleAnnotation() {
 	 */
 	canvas.mouseup(function(event) {
 		var eleUUID = $(this).data('uuid');
+		var canvasData = $(this)[0].toDataURL("image/png");
 		currentAnnotations[eleUUID]['options']['isDrawing'] = false;
+		$.post(saveCanvasImageURL, {image_data: canvasData, annotation_type: 'canvas', uuid: eleUUID}, function(data, textStatus, xhr) {
+			console.log(data);
+		});
 		return false;
 	});
 	canvas.mouseout(function(event) {

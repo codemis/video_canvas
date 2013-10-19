@@ -1,4 +1,11 @@
 <% content_for :footer do %>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			saveCanvasImageURL = "<%= save_image_annotation_path %>";
+		});
+	</script>
+<% end %>
+<% content_for :footer do %>
 	<%= render "layouts/dialog" %>
 <% end %>
 <h2>Video Annotation</h2>
