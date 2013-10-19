@@ -1,0 +1,18 @@
+defaults: &DEFAULTS
+  :twitter_id: TWITTER_ID
+  :twitter_secret: TWITTER_SECRET
+  :github_id: GITHUB_ID
+  :github_secret: GITHUB_SECRET
+  :facebook_id: FACEBOOK_ID
+  :facebook_secret: FACEBOOK_SECRET
+  :youtube_id: YOUTUBE_ID
+  :youtube_secret: YOUTUBE_SECRET
+
+development:
+  <<: *DEFAULTS
+
+test:
+  <<: *DEFAULTS
+
+production:
+  <<: *DEFAULTS

@@ -23,8 +23,6 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails'
 
 gem 'devise'
-gem 'populator'
-gem 'faker'
 gem 'omniauth-twitter'
 gem 'omniauth-github'
 gem 'omniauth-facebook'
@@ -45,6 +43,7 @@ group :test, :development do
   gem 'factory_girl_rails'
   gem 'faker'
   gem 'populator'
+  gem 'quiet_assets'
 end
 
 gem 'capistrano', '~> 2.15'
