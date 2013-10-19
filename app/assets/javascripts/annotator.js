@@ -18,7 +18,7 @@ var canvasSettings = {'stroke': 3, 'color': 'blue'};
  * @param String The URL for saving a canvas image
  *
  */
-var saveCanvasImageURL = "";
+var annotationsURL = "";
 /*
  * @param String The URL for getting an images data URL
  *
@@ -56,8 +56,51 @@ function addNewScribbleAnnotation() {
 	var canvasDialog = getDialogFrame(canvas);
 	$('body').append(canvasDialog);
 	canvasDialog.dialog({'height': dialogStartingDimensions['h'], width: dialogStartingDimensions['w'], 'resizeStop': function(event, ui){
-		resizeCanvas($(this).find('.content'));
-	}, dialogClass: 'transparent'});
+		var contentDiv = $(this).find('.content');
+		resizeCanvas(contentDiv);
+		var contentCanvas = contentDiv.children('canvas');
+		if (contentCanvas.length > 0) {
+			var currID = contentCanvas.data('id');
+			if (hasDataID(currID)) {
+				/*
+				 * When the canvas is resized, we need to add the image back
+				 *
+				 */
+				console.log(annotationsURL+'/'+currID);
+				$.ajax({
+					url: annotationsURL+'/'+currID,
+					type: 'get',
+					dataType: 'json',
+					data: {},
+				})
+				.done(function(data) {
+					var context = contentCanvas[0].getContext('2d');
+					var imageObj = new Image();
+					imageObj.onload = function() {
+						context.drawImage(this, 0, 0);
+					};
+					imageObj.src = data.scribble_data;
+				})
+				.fail(function() {
+					console.log("Unable to find the Annotation #"+currID);
+				});
+			};
+		};
+	}, dialogClass: 'transparent', 'close': function(event, ui) {
+		var currCanvas = $(this).find('.content').children('canvas');
+		var currID = currCanvas.data('id');
+		if (hasDataID(currID)) {
+			$.ajax({
+				url: annotationsURL+"/"+currID,
+				type: 'delete',
+				dataType: 'json',
+				data: {},
+			})
+			.fail(function() {
+				console.log("Unable to delete the annotation id: "+currID);
+			});
+		};
+	}});
 	resizeCanvas(canvasDialog.find('.content'));
 };
 /*
@@ -78,6 +121,8 @@ function addExistingAnnotations(annotations) {
  *
  * @param Hash Table annotation The annotation data to add
  * @return void
+ *
+ * @todo Might need to remove since it may be unnecessary, broken since I removed path from view
  */
 function addExistingScribbleAnnotation(annotation) {
 	$.get(getImageDataURL, {image_path: annotation['path']}, function(data) {
@@ -121,7 +166,7 @@ function createScribbleCanvas(uuid) {
 		 * Determine if we are creating or updating
 		 *
 		 */
-		if (typeof eleID !== 'undefined' && eleID !== false && $.isNumeric(eleID)) {
+		if (hasDataID(eleID)) {
 			ajaxType = 'patch';
 			var pathForID = '/'+eleID;
 		};
@@ -139,7 +184,7 @@ function createScribbleCanvas(uuid) {
 												}
 									};
 		$.ajax({
-			url: saveCanvasImageURL+pathForID,
+			url: annotationsURL+pathForID,
 			type: ajaxType,
 			data: annotationDataObject,
 			dataType: 'json',
@@ -240,4 +285,13 @@ function createUUID() {
 
     var uuid = s.join("");
     return uuid;
+};
+/*
+ * Checks and see that it has a data-id attribute
+ *
+ * @param Strong dataID The data-id attribute
+ * @return Boolean
+ */
+function hasDataID(dataID) {
+	return (typeof dataID !== 'undefined' && dataID !== false && $.isNumeric(dataID));
 };
