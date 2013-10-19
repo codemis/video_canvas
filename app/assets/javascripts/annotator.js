@@ -18,7 +18,7 @@ var canvasSettings = {'stroke': 3, 'color': 'blue'};
  * @param String The URL for saving a canvas image
  *
  */
-var saveCanvasImageURL = "";
+var annotationsURL = "";
 /*
  * @param String The URL for getting an images data URL
  *
@@ -57,7 +57,24 @@ function addNewScribbleAnnotation() {
 	$('body').append(canvasDialog);
 	canvasDialog.dialog({'height': dialogStartingDimensions['h'], width: dialogStartingDimensions['w'], 'resizeStop': function(event, ui){
 		resizeCanvas($(this).find('.content'));
-	}, dialogClass: 'transparent'});
+	}, dialogClass: 'transparent', 'close': function(event, ui) {
+		var currCanvas = $(this).find('.content').children('canvas');
+		var currID = currCanvas.data('id');
+		if (typeof currID !== 'undefined' && currID !== false && $.isNumeric(currID)) {
+			$.ajax({
+				url: annotationsURL+"/"+currID,
+				type: 'delete',
+				dataType: 'json',
+				data: {},
+			})
+			.done(function() {
+				console.log("success");
+			})
+			.fail(function() {
+				console.log("Unable to delete the annotation id: "+currID);
+			});
+		};
+	}});
 	resizeCanvas(canvasDialog.find('.content'));
 };
 /*
@@ -139,7 +156,7 @@ function createScribbleCanvas(uuid) {
 												}
 									};
 		$.ajax({
-			url: saveCanvasImageURL+pathForID,
+			url: annotationsURL+pathForID,
 			type: ajaxType,
 			data: annotationDataObject,
 			dataType: 'json',
