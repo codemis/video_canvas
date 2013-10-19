@@ -1,8 +1,8 @@
 Video Canvas
 ============
 
-Zombies on Rails 2013 proudly present Video Canvas!
----------------------------------------------------
+A Zombies on Rails production!
+------------------------------
 
 With this application you can add hats to cats, mustaches to monkeys,
 and rabbit ears to your little brother. Head on over to
