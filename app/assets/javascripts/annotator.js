@@ -19,7 +19,10 @@ var canvasSettings = {'stroke': 3, 'color': 'blue'};
  *
  */
 $(document).ready(function() {
-	addScribbleAnnotation();
+	$('a.trigger_scribble').click(function(event) {
+		addScribbleAnnotation();
+		return false;
+	});
 });
 /*
  * Returns an JQuery instance of the dialog window
