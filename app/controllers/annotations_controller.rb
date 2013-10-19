@@ -2,7 +2,7 @@ require 'base64'
 
 class AnnotationsController < ApplicationController
 
-	before_filter :set_canvas_data, only: [:create, :update]
+	before_filter :set_scribble_data, only: [:create, :update]
 	
 	# POST /annotations
 	#
@@ -15,8 +15,8 @@ class AnnotationsController < ApplicationController
 
 		respond_to do |format|
 			if @annotation.save
-				unless @canvas_data.nil?
-					unless @annotation.save_canvas_image(@canvas_data)
+				unless @scribble_data.nil?
+					unless @annotation.save_scribble_image(@scribble_data)
 						format.json { render json: {error: true, message: "Unable to save the file."} }	
 					end
 				end
@@ -38,8 +38,8 @@ class AnnotationsController < ApplicationController
 			passed_params[:user] = User.first
 			passed_params[:video] = Video.first
 			if @annotation.update_attributes(passed_params)
-				unless @canvas_data.nil?
-					unless @annotation.save_canvas_image(@canvas_data)
+				unless @scribble_data.nil?
+					unless @annotation.save_scribble_image(@scribble_data)
 						format.json { render json: {error: true, message: "Unable to save the file."} }	
 					end
 				end
@@ -64,17 +64,17 @@ class AnnotationsController < ApplicationController
 		# Set the strong params
 		#
 		def annotation_params
-			params.require(:annotation).permit(:video, :annotation_type, :start_time, :stop_time, :canvas_data, {position: [:x1, :y1, :height, :width]})
+			params.require(:annotation).permit(:video, :annotation_type, :start_time, :stop_time, :scribble_data, {position: [:x1, :y1, :height, :width]})
 		end
 
 		# Sets the Canvas data if a canvas type
 		#
-		def set_canvas_data
-			if params[:annotation][:annotation_type] == 'canvas'
-				@canvas_data = params[:annotation][:canvas_data]
-				params[:annotation].delete(:canvas_data)
+		def set_scribble_data
+			if params[:annotation][:annotation_type] == 'scribble'
+				@scribble_data = params[:annotation][:scribble_data]
+				params[:annotation].delete(:scribble_data)
 			else
-				@canvas_data = nil
+				@scribble_data = nil
 			end
 		end
 

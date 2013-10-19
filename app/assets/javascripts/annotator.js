@@ -131,8 +131,8 @@ function createScribbleCanvas(uuid) {
 		/*
 		 * Setup the Annotation data object for the Controller
 		 */
-		var annotationDataObject = { annotation: { 	canvas_data: canvasData, 
-													annotation_type: 'canvas', 
+		var annotationDataObject = { annotation: { 	scribble_data: canvasData, 
+													annotation_type: 'scribble', 
 													position: dialogPosition, 
 													start_time: 0, 
 													stop_time: 300

@@ -14,11 +14,11 @@ class Annotation < ActiveRecord::Base
 
 	# Save the Canvas image on disk
 	#
-	def save_canvas_image(canvas_data)
-		new_image_path = File.join(Rails.root, 'public', 'system', 'annotations', "canvas_#{self.id}.png")
-		canvas_image_data = Base64.decode64(canvas_data['data:image/png;base64,'.length .. -1])
+	def save_scribble_image(scribble_data)
+		new_image_path = File.join(Rails.root, 'public', 'system', 'annotations', "scribble_#{self.id}.png")
+		scribble_image_data = Base64.decode64(scribble_data['data:image/png;base64,'.length .. -1])
 		File.open(new_image_path, 'wb') do |f|
-		  f.write canvas_image_data
+		  f.write scribble_image_data
 		end
 		self.content = new_image_path
 		self.save
