@@ -4,6 +4,9 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
+  has_many :annotations
+  has_many :videos, through: :annotations
+
   validates :username, :avatar_text, :presence => true
   validates :username, :uniqueness => true
 

@@ -14,4 +14,26 @@ describe Video do
   	end
 
   end
+
+  describe "relationships" do
+    
+    it "should allow a video to have an annotation associated to it. " do
+      user = FactoryGirl.create(:defaulted_user)
+      video = FactoryGirl.create(:defaulted_video)
+      annotation = FactoryGirl.create(:position_annotation, user_id: user.id, video_id: video.id)
+
+      video.annotations.length.should == 1
+      video.annotations.first.should == annotation
+    end
+
+    it "should allow a video to have users through an annotation" do
+      user = FactoryGirl.create(:defaulted_user)
+      video = FactoryGirl.create(:defaulted_video)
+      annotation = FactoryGirl.create(:position_annotation, user_id: user.id, video_id: video.id)
+
+      video.users.length.should == 1
+      video.users.first.should == user
+    end
+
+  end
 end
