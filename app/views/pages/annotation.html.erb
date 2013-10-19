@@ -1,21 +1,5 @@
-<% content_for :footer do %>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			saveCanvasImageURL = "<%= annotation_save_image_path %>";
-			getImageDataURL = "<%= annotation_image_data_path %>";
-		});
-	</script>
-<% end %>
-<% content_for :footer do %>
-	<%= render "layouts/dialog" %>
-<% end %>
-<h2>Video Annotation</h2>
-<a href="#" class="trigger_scribble">New Canvas</a>
 
-
-
-
-
+<!-- TOGGLE TOOLBAR -->
 <div id="toolBar" class="hide">
     <ul id="tab1">
         <li>
@@ -37,4 +21,27 @@
         </nav>
     </div>
 </div>
+
+
+<!-- MAIN CONTENT AREA -->
+<div class="canvasMain fleft">
+
+	<% content_for :footer do %>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				saveCanvasImageURL = "<%= annotation_save_image_path %>";
+				getImageDataURL = "<%= annotation_image_data_path %>";
+			});
+		</script>
+	<% end %>
+
+	<% content_for :footer do %>
+		<%= render "layouts/dialog" %>
+	<% end %>
+
+	<h2>Video Annotation</h2>
+	<a href="#" class="trigger_scribble">New Canvas</a>
+
+</div> <!-- end MAIN -->
+<div class="clear"></div>
 

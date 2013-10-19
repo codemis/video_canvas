@@ -41,10 +41,18 @@ body {background-color:;}
 
 body {background:#f3f3f3 url('/assets/bg-main.jpg');}
 
+/* MAIN
+****************/
+.canvasMain {border:1px solid navy;}
+.canvasMain {
+	display:inline-block;
+}
+
 
 
 /* TOOL BAR
 ***************/
+#toolBar {border:1px solid lime;}
 
 #toolBar hgroup {}
 #toolBar hgroup h2 {font-size:13px;}
@@ -57,8 +65,9 @@ body {background:#f3f3f3 url('/assets/bg-main.jpg');}
     line-height: 20px;
     left: -110px;
     top: 25%; 
-    position: fixed;
+    float:left;
     z-index: 100;
+    display:inline-block;
 }
 #arrow, .bt{cursor: pointer;}
 #tab1{

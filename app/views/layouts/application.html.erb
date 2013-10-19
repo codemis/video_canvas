@@ -7,47 +7,56 @@
   <%= yield :head %>
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body id="index">
 
+  <!-- GLOBAL NAV -->
   <%= render "layouts/nav_global" %>
-	<ul>
-		<li>
-			<%= link_to "Home", root_path %>
-		</li>
-		<li>
-			<%= link_to "Annotation", annotation_page_path %>
-		</li>
-		<li>
-			<%= link_to "Logout", destroy_user_session_path, method: :delete if current_user && !current_user.guest_user %>
-		</li>
-		<li>
-			<%= link_to "Logout, here for development", destroy_user_session_path, method: :delete if current_user %>
-		</li>
-		<% if current_user %>
-			<%= "Logged in as: "%>
-		<% end %>
-	</ul>
+
+ 
+		<ul>
+			<li>
+				<%= link_to "Home", root_path %>
+			</li>
+			<li>
+				<%= link_to "Annotation", annotation_page_path %>
+			</li>
+			<li>
+				<%= link_to "Logout", destroy_user_session_path, method: :delete if current_user && !current_user.guest_user %>
+			</li>
+			<li>
+				<%= link_to "Logout, here for development", destroy_user_session_path, method: :delete if current_user %>
+			</li>
+			<% if current_user %>
+				<%= "Logged in as: "%>
+			<% end %>
+		</ul>
 
 
-	<p class="notice"><%= notice %></p>
-	<p class="alert"><%= alert %></p>
+		<p class="notice"><%= notice %></p>
+		<p class="alert"><%= alert %></p>
 
 
-	<div id="text-fade-container">
-    	<p>Youtube just got a little more </p>
-		 <div id="text-fade-content">
-			<span>mustaches.</span>
-			<span>fart clouds.</span>
-			<span>stick figures.</span>
-			<span>doodles.</span>
-            <span>angry eyes.</span>
-            <span>lols.</span>
-            <span>squiggly smell lines.</span>
-            <span>crazy hats.</span>
-		 </div>
-	</div>
+		<div id="text-fade-container">
+	    	<p>Youtube just got a little more </p>
+			<div id="text-fade-content">
+				<span>mustaches.</span>
+				<span>fart clouds.</span>
+				<span>stick figures.</span>
+				<span>doodles.</span>
+	            <span>angry eyes.</span>
+	            <span>lols.</span>
+	            <span>squiggly smell lines.</span>
+	            <span>crazy hats.</span>
+			</div>
+		</div>
 
-  <%= yield %>
+
+
+	  <%= yield %>
+
+ 
+
+
 
   <%= yield :footer %>
 </body>

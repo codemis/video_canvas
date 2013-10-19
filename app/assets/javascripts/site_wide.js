@@ -1,23 +1,41 @@
 $(document).ready(function() {
 
 
-
-/*  // TOOLBAR TOGGLE //  */
-		toggle('toolBar');
-
-
-/*  // FADE TAGLINE //  */
+/**** FADE TAGLINE ****/
 		//hide all spans
 		$('#text-fade-content span').hide();
 		
 		//start fade on the first span
 		fadeText( $('#text-fade-content span:first') );
 
+
+
+/**** TOOLBAR TOGGLE ****/
+	
+
+	$('#toolBar').exists(function() {
+  		toggle('toolBar');
+	});
+
+
+
 });
 
 
+	/**** FADES THE TAGLINE WORDS ****/
 
-	/*   // FADES THE TAGLINE WORDS  //  */
+	//Check if it exists function
+	$.fn.exists = function(callback) {
+		  var args = [].slice.call(arguments, 1);
+
+		  if (this.length) {
+		    callback.call(this, args);
+		  }
+
+		  return this;
+		};
+
+	// Fade the text function
 	function fadeText(text) {
 	
 		//get next span
@@ -32,8 +50,9 @@ $(document).ready(function() {
 		$(text).fadeIn(1000).delay(2000).fadeOut(1000, function() { fadeText( next ) } );
 	}
 	
-	
 
+
+	/**** TOOLBAR TOGGLE ****/
 	
 
 		function toggle(id) {
