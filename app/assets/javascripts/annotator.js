@@ -117,8 +117,10 @@ function createScribbleCanvas(uuid) {
 		var dialogPosition = getDialogPosition(ele.parents('div.ui-dialog'));
 		var canvasData = ele[0].toDataURL("image/png");
 		currentAnnotations[eleUUID]['options']['isDrawing'] = false;
-		$.post(saveCanvasImageURL, {image_data: canvasData, annotation_type: 'canvas', uuid: eleUUID, position: dialogPosition}, function(data, textStatus, xhr) {
-			console.log(data);
+		$.post(saveCanvasImageURL, { annotation: { canvas_data: canvasData, annotation_type: 'canvas', position: dialogPosition, start_time: 0, stop_time: 300}}, function(data, textStatus, xhr) {
+			if (data.hasOwnProperty('id') && $.isNumeric(data.id)) {
+				ele.attr('data-id', data.id);
+			};
 		});
 		return false;
 	});

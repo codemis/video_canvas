@@ -43,6 +43,8 @@ group :test, :development do
   gem 'database_cleaner'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
+  gem 'faker'
+  gem 'populator'
 end
 
 gem 'capistrano', '~> 2.15'
