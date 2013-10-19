@@ -3,6 +3,15 @@ require 'base64'
 class AnnotationsController < ApplicationController
 
 	before_filter :set_scribble_data, only: [:create, :update]
+	before_filter :set_annotation, only: [:destroy, :update, :show]
+
+	# GET /annotations/:id
+	#
+	def show
+		respond_to do |format|
+			format.json { render json: @annotation }
+		end
+	end
 	
 	# POST /annotations
 	#
@@ -31,8 +40,6 @@ class AnnotationsController < ApplicationController
 	# PATCH /annotations/:id
 	#
 	def update
-		@annotation = Annotation.find(params[:id])
-
 		respond_to do |format|
 			passed_params = annotation_params
 			passed_params[:user] = User.first
@@ -51,16 +58,26 @@ class AnnotationsController < ApplicationController
 		end		
 	end
 
-	def image_data
-		data = Base64.encode64(File.read(params['image_path'])).gsub("\n", '')
-		uri  = "data:image/png;base64,#{data}"
+	# DELETE /annotations/:id
+	#
+	def destroy
+		if @annotation.annotation_type == 'scribble'
+			File.delete(@annotation.content)
+		end
+		@annotation.destroy
 
 		respond_to do |format|
-			format.json { render json: {image_data: uri} }
-		end
+			format.json { head :no_content }
+		end	
 	end
 
 	private
+		# Sets the curent annotation
+		#
+		def set_annotation
+			@annotation = Annotation.find(params[:id])
+		end
+
 		# Set the strong params
 		#
 		def annotation_params

@@ -12,7 +12,6 @@ Videocanvas::Application.routes.draw do
   root 'pages#home'
   get '/annotation' => 'pages#annotation', as: :annotation_page
   put '/create_guest_user' => 'users#create_guest_user', as: :create_guest_user
-  get '/annotations/image_data' => 'annotations#image_data', as: :annotation_image_data
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
