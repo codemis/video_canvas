@@ -2,26 +2,57 @@ require 'base64'
 
 class AnnotationsController < ApplicationController
 
+	before_filter :set_canvas_data, only: :create
+	
+	# POST /annotations
+	#
+	def create
+		# TODO Remp code needs cleaning up
+		passed_params = annotation_params
+		passed_params[:user] = User.first
+		passed_params[:video] = Video.first
+		@annotation = Annotation.new(passed_params)
+
+		respond_to do |format|
+			if @annotation.save
+				unless @canvas_data.nil?
+					unless @annotation.save_canvas_image(@canvas_data)
+						format.json { render json: {error: true, message: "Unable to save the file."} }	
+					end
+				end
+				format.json { render json: @annotation, status: :created, location: @annotation }
+			else
+				@message = @annotation.errors.empty? ? "Your Annotation has not been saved" : "Your Annotation has not been saved because: " + @annotation.errors.full_messages.to_sentence
+				format.json { render json: {error: true, message: @message} }
+			end
+		end
+	end
+
 	def image_data
 		data = Base64.encode64(File.read(params['image_path'])).gsub("\n", '')
 		uri  = "data:image/png;base64,#{data}"
 
 		respond_to do |format|
-			format.json {render json: {image_data: uri}}
+			format.json { render json: {image_data: uri} }
 		end
 	end
 
-	def save_image
-		new_image_path = File.join(Rails.root, 'public', 'system', 'annotations', params['uuid'] + ".png")
-		@image_data = {uuid: params['uuid'], path: new_image_path}
-		data = params[:image_data]
-		image_data = Base64.decode64(data['data:image/png;base64,'.length .. -1])
-		File.open(new_image_path, 'wb') do |f|
-		  f.write image_data
+	private
+		# Set the strong params
+		#
+		def annotation_params
+			params.require(:annotation).permit(:video, :annotation_type, :start_time, :stop_time, :canvas_data, {position: [:x1, :y1, :height, :width]})
 		end
 
-		respond_to do |format|
-			format.json {render json: @image_data}
+		# Sets the Canvas data if a canvas type
+		#
+		def set_canvas_data
+			if params[:annotation][:annotation_type] == 'canvas'
+				@canvas_data = params[:annotation][:canvas_data]
+				params[:annotation].delete(:canvas_data)
+			else
+				@canvas_data = nil
+			end
 		end
-	end
+
 end
