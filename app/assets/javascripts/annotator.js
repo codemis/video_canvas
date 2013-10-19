@@ -25,7 +25,7 @@ var saveCanvasImageURL = "";
  */
 $(document).ready(function() {
 	$('a.trigger_scribble').click(function(event) {
-		addScribbleAnnotation();
+		addNewScribbleAnnotation();
 		return false;
 	});
 });
@@ -45,7 +45,7 @@ function getDialogFrame(content) {
  *
  * @return void
  */
-function addScribbleAnnotation() {
+function addNewScribbleAnnotation() {
 	var uuid = addNewObjectToCurrentAnnotations('canvas', {'isDrawing': false});
 	var canvas = $('<canvas/>').attr({'data-uuid': uuid}).addClass('scribbleAnnotation').css({'cursor': 'pointer'});
 	var canvasContext = canvas[0].getContext('2d');
