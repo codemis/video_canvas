@@ -5,6 +5,11 @@
  */
 var currentAnnotations = {};
 /*
+ * @param Hash Table Stores the dimensions for the starting dialog
+ *
+ */
+var dialogStartingDimensions = {'h': 300, 'w': 300};
+/*
  * Document is ready
  *
  */
@@ -33,7 +38,7 @@ function addScribbleAnnotation() {
 	// var canvasContext = canvas.getContext('2d');
 	var widget = getDialogFrame(canvas);
 	$('body').append(widget);
-	widget.dialog({'resizeStop': function(event, ui){
+	widget.dialog({'height': dialogStartingDimensions['h'], width: dialogStartingDimensions['w'], 'resizeStop': function(event, ui){
 		resizeCanvas($(this).find('.content'));
 	}});
 	resizeCanvas(widget.find('.content'));
