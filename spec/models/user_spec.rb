@@ -1,5 +1,9 @@
 require 'spec_helper'
 
 describe User do
-  pending "add some examples to (or delete) #{__FILE__}"
+	describe "validations" do
+		it "should create a valid user with just a username" do
+			
+		end
+	end
 end

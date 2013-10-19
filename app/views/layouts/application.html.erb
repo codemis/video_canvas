@@ -7,6 +7,9 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+	<!-- here for development -->
+	<%= link_to "Logout", destroy_user_session_path, method: :delete if current_user && !current_user.guest_user %>
+	<%= link_to "Logout, here for development", destroy_user_session_path, method: :delete if current_user %>
 
 	<p class="notice"><%= notice %></p>
 	<p class="alert"><%= alert %></p>
