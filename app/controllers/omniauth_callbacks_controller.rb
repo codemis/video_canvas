@@ -4,6 +4,10 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
 		#raise request.env["omniauth.auth"].to_yaml
 		user = User.find_or_create_omniauth(request.env["omniauth.auth"])
 		if user.persisted?
+			if session[:guest_user_id]
+				User.sync_user_annotations(user, session[:guest_user_id])
+				session[:guest_user_id] = nil
+			end
 			flash.notice = "Signed in with " + user.provider + "!"
 			sign_in user
 			redirect_to root_path

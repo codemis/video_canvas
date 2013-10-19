@@ -52,4 +52,15 @@ class User < ActiveRecord::Base
     new_user
   end
 
+  def self.sync_user_annotations(authenticated_user, guest_user_id)
+    guest_user = User.find(guest_user_id)
+
+    guest_user.annotations.each do |annotation|
+      annotation.user_id = authenticated_user.id
+      annotation.save    
+    end
+
+    guest_user.destroy
+  end
+
 end

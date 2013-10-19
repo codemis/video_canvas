@@ -20,17 +20,6 @@ describe User do
 
 	end
 
-	describe "methods" do
-
-		it "should generate new avatar text that contains the text that is passed in" do
-			first = User.generate_new_avatar_text("blah")
-			second = User.generate_new_avatar_text("blah")
-
-			first.should_not == second
-		end
-
-	end
-
 	describe "relationships" do
 		
 		it "should allow a user to have an annotation associated to it. " do
@@ -49,6 +38,33 @@ describe User do
 
 			user.videos.length.should == 1
 			user.videos.first.should == video
+		end
+
+	end
+
+	describe "methods" do
+
+		it "should generate new avatar text that contains the text that is passed in" do
+			first = User.generate_new_avatar_text("blah")
+			second = User.generate_new_avatar_text("blah")
+
+			first.should_not == second
+		end
+
+		it "should take all the annotations associated with a guest user and assign them to the new authenticated user" do
+			guest_user = FactoryGirl.create(:defaulted_user)
+			authenticated_user = FactoryGirl.create(:defaulted_user, username: "authenticated user")
+			video = FactoryGirl.create(:defaulted_video)
+			annotation = FactoryGirl.create(:position_annotation, user_id: guest_user.id, video_id: video.id)
+
+			guest_user.annotations.length.should == 1
+			authenticated_user.annotations.length.should == 0
+
+			User.sync_user_annotations(authenticated_user, guest_user.id)
+
+			
+			u2 = User.find(authenticated_user.id)
+			u2.annotations.length.should == 1
 		end
 
 	end
