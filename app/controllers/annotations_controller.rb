@@ -3,7 +3,15 @@ require 'base64'
 class AnnotationsController < ApplicationController
 
 	before_filter :set_scribble_data, only: [:create, :update]
-	before_filter :set_annotation, only: [:destroy, :update]
+	before_filter :set_annotation, only: [:destroy, :update, :show]
+
+	# GET /annotations/:id
+	#
+	def show
+		respond_to do |format|
+			format.json { render json: @annotation }
+		end
+	end
 	
 	# POST /annotations
 	#
@@ -61,15 +69,6 @@ class AnnotationsController < ApplicationController
 		respond_to do |format|
 			format.json { head :no_content }
 		end	
-	end
-
-	def image_data
-		data = Base64.encode64(File.read(params['image_path'])).gsub("\n", '')
-		uri  = "data:image/png;base64,#{data}"
-
-		respond_to do |format|
-			format.json { render json: {image_data: uri} }
-		end
 	end
 
 	private

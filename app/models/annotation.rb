@@ -5,6 +5,8 @@ class Annotation < ActiveRecord::Base
 	store_accessor :position, :y1
 	store_accessor :position, :height
 	store_accessor :position, :width
+	attr_accessor :scribble_data
+
 	belongs_to :user
 	belongs_to :video
 
@@ -22,5 +24,20 @@ class Annotation < ActiveRecord::Base
 		end
 		self.content = new_image_path
 		self.save
+	end
+
+	# Set the scribble_data param
+	#
+	def scribble_data
+		if self.annotation_type == 'scribble'
+			data = Base64.encode64(File.read(self.content)).gsub("\n", '')
+			"data:image/png;base64,#{data}"
+		end
+	end
+
+	# Add addition params to JSON by overriding as_json
+	#
+	def as_json(options)
+		super(methods: [:scribble_data])
 	end
 end
