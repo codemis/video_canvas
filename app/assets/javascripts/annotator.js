@@ -80,7 +80,7 @@ function addScribbleAnnotation() {
 	$('body').append(canvasDialog);
 	canvasDialog.dialog({'height': dialogStartingDimensions['h'], width: dialogStartingDimensions['w'], 'resizeStop': function(event, ui){
 		resizeCanvas($(this).find('.content'));
-	}});
+	}, dialogClass: 'transparent'});
 	resizeCanvas(canvasDialog.find('.content'));
 };
 /*
