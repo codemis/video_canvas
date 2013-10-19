@@ -9,6 +9,7 @@
 </head>
 <body>
 
+  <%= render "layouts/nav_global" %>
 	<ul>
 		<li>
 			<%= link_to "Home", root_path %>
@@ -31,7 +32,23 @@
 	<p class="notice"><%= notice %></p>
 	<p class="alert"><%= alert %></p>
 
-	<%= yield %>
-	<%= yield :footer %>
+
+	<div id="text-fade-container">
+    	<p>Youtube just got a little more </p>
+		 <div id="text-fade-content">
+			<span>mustaches.</span>
+			<span>fart clouds.</span>
+			<span>stick figures.</span>
+			<span>doodles.</span>
+            <span>angry eyes.</span>
+            <span>lols.</span>
+            <span>squiggly smell lines.</span>
+            <span>crazy hats.</span>
+		 </div>
+	</div>
+
+  <%= yield %>
+
+  <%= yield :footer %>
 </body>
 </html>
