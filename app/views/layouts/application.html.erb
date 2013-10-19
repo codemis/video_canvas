@@ -7,6 +7,7 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+
 	<ul>
 		<li>
 			<%= link_to "Home", root_path %>
@@ -20,7 +21,11 @@
 		<li>
 			<%= link_to "Logout, here for development", destroy_user_session_path, method: :delete if current_user %>
 		</li>
+		<% if current_user %>
+			<%= "Logged in as: "%>
+		<% end %>
 	</ul>
+
 
 	<p class="notice"><%= notice %></p>
 	<p class="alert"><%= alert %></p>
