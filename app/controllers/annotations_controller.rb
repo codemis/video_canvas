@@ -19,7 +19,7 @@ class AnnotationsController < ApplicationController
 		# TODO Temp code needs cleaning up
 		passed_params = annotation_params
 		passed_params[:user] = User.first
-		passed_params[:video] = Video.first
+		passed_params[:video] = Video.find(params[:annotation][:video_id])
 		@annotation = Annotation.new(passed_params)
 
 		respond_to do |format|

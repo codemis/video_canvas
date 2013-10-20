@@ -23,10 +23,11 @@ $(document).ready(function() {
  * @return void
  */
 function onYouTubeIframeAPIReady() {
+	var ytVideoID = $('#annotated_video').data('youtube-id');
 	player = new YT.Player('player', {
 		height: '360',
 		width: '480',
-		videoId: 'jofNR_WkoCE',
+		videoId: ytVideoID,
 		playerVars: {'rel': 0},
 		events: {
 			'onReady': onYouTubePlayerReady
