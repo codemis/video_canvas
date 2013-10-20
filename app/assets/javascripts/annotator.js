@@ -30,25 +30,50 @@ var getImageDataURL = "";
  *
  */
 var pinHTML = "<button class='pin'></button>";
+var deleteHTML = "<button class='delete'>X</button>";
 /*
  * @param String The HTML Markup for the dialog to hide users
  *
  */
-var hideHTML = "<button class='hide_user'>X</button>";
+var hideHTML = "<button class='hide_user'>O</button>";
 /*
  * @param Integer The additional hheight for the slider
  */
 var sliderHeight = 10;
+var annotationQeue = {};
 /*
  * Document is ready
  *
  */
 $(document).ready(function() {
 	$('a.trigger_scribble').click(function(event) {
-		addNewScribbleAnnotation();
+		newScribbleAnnotation();
 		return false;
 	});
 });
+function checkQeueForNewAnnotation(youtubePlayer) {
+	if(youtubePlayer.getPlayerState() == 1) {
+		/* Video is playing */
+		var currentTime = youtubePlayer.getCurrentTime();
+		var minTime = parseInt(currentTime) - 10;
+		var maxTime = parseInt(currentTime) + 10;
+		$.each(annotationQeue, function(index, val) {
+			var dialogID = 'dialog-for-annotations-'+val.id;
+			currDialog = $('#'+dialogID);
+			 if((maxTime >= val.start_time) && (val.start_time >= minTime)) {
+			 	if(currDialog.dialog("isOpen") === false) {
+			 		openDialogModal(currDialog, val);
+			 	};
+			 }else{
+			 	if((maxTime >= val.stop_time) && (val.stop_time >= minTime)) {
+				 	if(currDialog.dialog( "isOpen" ) === true) {
+				 		currDialog.dialog('close');
+				 	};
+				 };
+			 }
+		});
+	}
+};
 /*
  * Returns an JQuery instance of the dialog window
  *
@@ -60,187 +85,68 @@ function getDialogFrame(content) {
 	widgetFrame.find('.content').append(content).removeClass('hidden');
 	return widgetFrame;
 };
-/*
- * Adds a Scribble Annotation to the screen
- *
- * @return void
- */
-function addNewScribbleAnnotation() {
-	var uuid = addNewObjectToCurrentAnnotations('canvas', {'isDrawing': false});
-	var canvas = createScribbleCanvas(uuid);
+function createScribbleDialogModal(annotation, dialogType) {
+	if(dialogType == 'manageable') {
+		var uuid = addNewObjectToCurrentAnnotations('canvas', {'isDrawing': false});
+		var canvas = createScribbleCanvas(uuid);
+	} else if(dialogType == 'viewable') {
+		var canvas = $('<canvas/>').addClass('scribbleAnnotation').css({'cursor': 'pointer'});
+	}
 	var canvasDialog = getDialogFrame(canvas);
+	/*
+	 * Add to the dialog que to handle the displaying timing
+	 */
+	var dialogID = 'dialog-for-annotations-'+annotation.id;
+	canvasDialog.attr('id', dialogID);
 	$('body').append(canvasDialog);
-	canvasDialog.dialog({'height': dialogStartingDimensions['h'], width: dialogStartingDimensions['w'], 'resizeStop': function(event, ui){
-		scribbleDialogResizeStopCallback($(this));
-	}, dialogClass: 'transparent', 'close': function(event, ui) {
-		scribbleDialogCloseCallback($(this));
-	}, 'dragStop': function(event, ui) {
-		var contentCanvas = $(this).find('canvas');
-		var currID = contentCanvas.attr('data-id');
-		if (hasDataID(currID)) {
-			saveAnnotation(contentCanvas, 'scribble');
-		}
-	}});
-	var titleBar = canvasDialog.parents('.ui-dialog').find('.ui-dialog-titlebar');
-	$(pinHTML).appendTo(titleBar).click(function(event) {
-		togglePinSlider($(this), 'scribble');
-	});
-	
-	resizeCanvas(canvasDialog.find('.content'));
-};
-/*
- * The dialog callback for resizeStop
- *
- * @param Object ele the dialog JQuery element
- *
- * @return void
- */
-function scribbleDialogResizeStopCallback(ele) {
-	var contentDiv = ele.find('.content');
-	resizeCanvas(contentDiv);
-	var contentCanvas = contentDiv.children('canvas');
-	if (contentCanvas.length > 0) {
-		var currID = contentCanvas.attr('data-id');
-		if (hasDataID(currID)) {
-			/*
-			 * When the canvas is resized, we need to add the image back
-			 *
-			 */
-			$.ajax({
-				url: annotationsURL+'/'+currID,
-				type: 'get',
-				dataType: 'json',
-				data: {},
-			})
-			.done(function(data) {
+	positionHash = {at: 'left+'+annotation.position.x1+' top+'+annotation.position.y1, my: 'left top', of: $(document)};
+
+	if(dialogType == 'manageable') {
+		canvasDialog.dialog({'height': annotation.position.height, width: annotation.position.width, position: positionHash, 'resizeStop': function(event, ui){
+			scribbleDialogResizeStopCallback($(this));
+		}, dialogClass: 'transparent', 'dragStop': function(){
+			var contentCanvas = $(this).find('canvas');
+			var currID = contentCanvas.attr('data-id');
+			if (hasDataID(currID)) {
 				saveAnnotation(contentCanvas, 'scribble');
-				var context = contentCanvas[0].getContext('2d');
-				var imageObj = new Image();
-				imageObj.onload = function() {
-					context.drawImage(this, 0, 0);
-				};
-				imageObj.src = data.scribble_data;
-			})
-			.fail(function() {
-				console.log("Unable to find the Annotation #"+currID);
-			});
+			}
+		}});
+	} else if(dialogType == 'viewable') {
+		canvasDialog.dialog({'height': annotation.position.height, width: annotation.position.width, position: positionHash, dialogClass: 'transparent viewable', draggable: false, resizable: false, title: annotation.contributor, closeOnEscape: false});
+	}
+
+	canvasDialog.dialog('close');
+	var titleBar = canvasDialog.parents('.ui-dialog').find('.ui-dialog-titlebar');
+
+	if(dialogType == 'manageable') {
+		$(pinHTML).appendTo(titleBar).click(function(event) {
+			togglePinSlider($(this), 'scribble');
+		});
+		$(deleteHTML).appendTo(titleBar).click(function(event) {
+			scribbleDialogDeleteButtonPressed($(this));
+		});
+	} else if(dialogType == 'viewable') {
+		$(hideHTML).appendTo(titleBar).click(function(event) {
+			hideUser($(this));
+		});
+	}
+};
+function openDialogModal(currDialog, annotation) {
+	currDialog.dialog('open');
+	if(annotation.annotation_type == 'scribble') {
+		var uuid = addNewObjectToCurrentAnnotations('canvas', {'isDrawing': false, startTime: annotation.start_time, stopTime: annotation.stop_time});
+		canvas = currDialog.find('canvas.scribbleAnnotation');
+		canvas.attr('data-id', annotation.id);
+		canvas.attr('data-user-id', annotation.user_id);
+		var context = canvas[0].getContext('2d');
+		var imageObj = new Image();
+		imageObj.onload = function() {
+	  		context.drawImage(this, 0, 0);
 		};
-	};
-};
-/*
- * The dialog callback for close
- *
- * @param Object ele the dialog JQuery element
- *
- * @return void
- */
-function scribbleDialogCloseCallback(ele) {
-	var currCanvas = ele.find('.content').children('canvas');
-	var currID = currCanvas.attr('data-id');
-	var currUUID = currCanvas.attr('data-uuid');
-	currentAnnotations[currUUID] = {};
-	if (hasDataID(currID)) {
-		$.ajax({
-			url: annotationsURL+"/"+currID,
-			type: 'delete',
-			dataType: 'json',
-			data: {},
-		})
-		.fail(function() {
-			console.log("Unable to delete the annotation id: "+currID);
-		});
-	};
-};
-/*
- * Iterates over existing annotations and adds them to the page
- *
- * @param Array annotations the array of annotations
- * @return void
- */
-function addExistingAnnotations(annotations) {
-	var videoID = $('#annotated_video').attr('data-our-id');
-	$.ajax({
-		url: '/protected_contributions',
-		type: 'GET',
-		dataType: 'json',
-		data: {video_id: videoID},
-	}).done(function(data) {
-		var uintArray = data.contributions;
-		$.each(annotations, function(index, val) {
-			 if (val['annotation_type'] == 'scribble') {
-			 	if (($.isArray(uintArray)) && ($.inArray(val['id'], uintArray) === -1)) {
-			 		addExistingViewableScribbleAnnotation(val);
-			 	} else {
-			 		addExistingManagableScribbleAnnotation(val);
-			 	};
-			 };
-		});
-	}).fail(function() {
-		console.log("Unable to get protected ids.");
-	});
-};
-function addExistingViewableScribbleAnnotation(annotation) {
-	var canvas = $('<canvas/>').addClass('scribbleAnnotation').css({'cursor': 'pointer'});
-	canvas.attr('data-id', annotation.id);
-	canvas.attr('data-user-id', annotation.user_id);
-	var context = canvas[0].getContext('2d');
-	var canvasDialog = getDialogFrame(canvas);
-	var imageObj = new Image();
-	imageObj.onload = function() {
-	  context.drawImage(this, 0, 0);
-	};
-	imageObj.src = annotation.scribble_data;
-	$('body').append(canvasDialog);
-	positionHash = {at: 'left+'+annotation.position.x1+' top+'+annotation.position.y1, my: 'left top', of: $(document)};
-	canvasDialog.dialog({'height': annotation.position.height, width: annotation.position.width, position: positionHash, dialogClass: 'transparent viewable', draggable: false, resizable: false, title: annotation.contributor, closeOnEscape: false});
-	var titleBar = canvasDialog.parents('.ui-dialog').find('.ui-dialog-titlebar');
-	$(hideHTML).appendTo(titleBar).click(function(event) {
-		hideUser($(this));
-	});
-
-	resizeCanvas(canvasDialog.find('.content'));
-};
-function hideUser(ele) {
-
-};
-/*
- * Adds the existing Scribble Annotation for managing to the page
- *
- * @param Hash Table annotation The annotation data to add
- * @return void
- *
- * @todo Might need to remove since it may be unnecessary, broken since I removed path from view
- */
-function addExistingManagableScribbleAnnotation(annotation) {
-	var uuid = addNewObjectToCurrentAnnotations('canvas', {'isDrawing': false, startTime: annotation.start_time, stopTime: annotation.stop_time});
-	var canvas = createScribbleCanvas(uuid);
-	canvas.attr('data-id', annotation.id);
-	var context = canvas[0].getContext('2d');
-	var canvasDialog = getDialogFrame(canvas);
-	var imageObj = new Image();
-	imageObj.onload = function() {
-	  context.drawImage(this, 0, 0);
-	};
-	imageObj.src = annotation.scribble_data;
-	$('body').append(canvasDialog);
-	positionHash = {at: 'left+'+annotation.position.x1+' top+'+annotation.position.y1, my: 'left top', of: $(document)};
-	canvasDialog.dialog({'height': annotation.position.height, width: annotation.position.width, position: positionHash, 'resizeStop': function(event, ui){
-		scribbleDialogResizeStopCallback($(this));
-	}, dialogClass: 'transparent', 'close': function(event, ui) {
-		scribbleDialogCloseCallback($(this));
-	}, 'dragStop': function(){
-		var contentCanvas = $(this).find('canvas');
-		var currID = contentCanvas.attr('data-id');
-		if (hasDataID(currID)) {
-			saveAnnotation(contentCanvas, 'scribble');
-		}
-	}});
-	var titleBar = canvasDialog.parents('.ui-dialog').find('.ui-dialog-titlebar');
-	$(pinHTML).appendTo(titleBar).click(function(event) {
-		togglePinSlider($(this), 'scribble');
-	});
-	
-	resizeCanvas(canvasDialog.find('.content'));
+		imageObj.src = annotation.scribble_data;
+		currDialog.find('.content').append(canvas);
+		resizeCanvas(currDialog.find('.content'));
+	}
 };
 /*
  * Create a canvas for scribbling
@@ -290,6 +196,133 @@ function createScribbleCanvas(uuid) {
 		return false;
 	});
 	return canvas;
+};
+/*
+ * Iterates over existing annotations and adds them to the page
+ *
+ * @param Array annotations the array of annotations
+ * @return void
+ */
+function addExistingAnnotations(annotations) {
+	var videoID = $('#annotated_video').attr('data-our-id');
+	$.ajax({
+		url: '/protected_contributions',
+		type: 'GET',
+		dataType: 'json',
+		data: {video_id: videoID},
+	}).done(function(data) {
+		var uintArray = data.contributions;
+		$.each(annotations, function(index, val) {
+			 if (val['annotation_type'] == 'scribble') {
+			 	if (($.isArray(uintArray)) && ($.inArray(val['id'], uintArray) === -1)) {
+			 		createScribbleDialogModal(val, 'viewable');
+			 	} else {
+			 		createScribbleDialogModal(val, 'manageable');
+			 	};
+			 };
+			 annotationQeue[val.id] = val;
+		});
+	}).fail(function() {
+		console.log("Unable to get protected ids.");
+	});
+};
+/*
+ * Adds a Scribble Annotation to the screen
+ *
+ * @return void
+ */
+function newScribbleAnnotation() {
+	var uuid = addNewObjectToCurrentAnnotations('canvas', {'isDrawing': false});
+	var canvas = createScribbleCanvas(uuid);
+	var canvasDialog = getDialogFrame(canvas);
+	$('body').append(canvasDialog);
+	canvasDialog.dialog({'height': dialogStartingDimensions['h'], width: dialogStartingDimensions['w'], 'resizeStop': function(event, ui){
+		scribbleDialogResizeStopCallback($(this));
+	}, dialogClass: 'transparent', 'dragStop': function(event, ui) {
+		var contentCanvas = $(this).find('canvas');
+		var currID = contentCanvas.attr('data-id');
+		if (hasDataID(currID)) {
+			saveAnnotation(contentCanvas, 'scribble');
+		}
+	}});
+	var titleBar = canvasDialog.parents('.ui-dialog').find('.ui-dialog-titlebar');
+	$(pinHTML).appendTo(titleBar).click(function(event) {
+		togglePinSlider($(this), 'scribble');
+	});
+	$(deleteHTML).appendTo(titleBar).click(function(event) {
+		scribbleDialogDeleteButtonPressed($(this));
+	});
+	
+	resizeCanvas(canvasDialog.find('.content'));
+};
+/*
+ * The dialog callback for resizeStop
+ *
+ * @param Object ele the dialog JQuery element
+ *
+ * @return void
+ */
+function scribbleDialogResizeStopCallback(ele) {
+	var contentDiv = ele.find('.content');
+	resizeCanvas(contentDiv);
+	var contentCanvas = contentDiv.children('canvas');
+	if (contentCanvas.length > 0) {
+		var currID = contentCanvas.attr('data-id');
+		if (hasDataID(currID)) {
+			/*
+			 * When the canvas is resized, we need to add the image back
+			 *
+			 */
+			$.ajax({
+				url: annotationsURL+'/'+currID,
+				type: 'get',
+				dataType: 'json',
+				data: {},
+			})
+			.done(function(data) {
+				saveAnnotation(contentCanvas, 'scribble');
+				var context = contentCanvas[0].getContext('2d');
+				var imageObj = new Image();
+				imageObj.onload = function() {
+					context.drawImage(this, 0, 0);
+				};
+				imageObj.src = data.scribble_data;
+			})
+			.fail(function() {
+				console.log("Unable to find the Annotation #"+currID);
+			});
+		};
+	};
+};
+/*
+ * The dialog delete button is pressed
+ *
+ * @param Object ele the dialog JQuery element
+ *
+ * @return void
+ */
+function scribbleDialogDeleteButtonPressed(ele) {
+	var dialog = $(ele).parents('.ui-dialog').eq(0);
+	var currCanvas = dialog.find('.content').children('canvas');
+	var currID = currCanvas.attr('data-id');
+	if(currID) {
+		var currUUID = currCanvas.attr('data-uuid');
+		currentAnnotations[currUUID] = {};
+		if (hasDataID(currID)) {
+			$.ajax({
+				url: annotationsURL+"/"+currID,
+				type: 'delete',
+				dataType: 'json',
+				data: {},
+			})
+			.fail(function() {
+				console.log("Unable to delete the annotation id: "+currID);
+			});
+		};
+	}
+};
+function hideUser(ele) {
+
 };
 /*
  * Save the annotation into the database

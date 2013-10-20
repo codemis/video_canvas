@@ -41,6 +41,7 @@ function onYouTubeIframeAPIReady() {
  */
 function onYouTubePlayerReady(event) {
 	videoDuration = player.getDuration();
+	window.setInterval(function() { checkQeueForNewAnnotation(player); }, 500);
 };
 /*
  * When the slider is moved, this method will be triggered
