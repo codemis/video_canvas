@@ -306,7 +306,8 @@ function getDialogPosition(dialog) {
 function togglePinSlider(pin, annotationType) {
 	var dialog = $(pin).parents('.ui-dialog').eq(0);
 	if (annotationType == 'scribble') {
-		var annotationUUID = dialog.find('canvas').data('uuid');
+		var annotationElement = dialog.find('canvas');
+		var annotationUUID = annotationElement.data('uuid');
 	};
 	var dialogContent = dialog.find('div.ui-dialog-content').eq(0);
 	var sliderDiv = dialog.find('div.pin_slider').eq(0);
@@ -328,7 +329,7 @@ function togglePinSlider(pin, annotationType) {
 		if (currentAnnotations[annotationUUID]['options'].hasOwnProperty('stopTime')) {
 			currentAnnotations[annotationUUID]['options']['stopTime'] = videoDuration;
 		}
-		
+		saveAnnotation(annotationElement, annotationType);
 	} else {
 		$(pin).attr('data-showing', 'YES');
 		$(pin).addClass('pinned').removeClass('unpinned');
@@ -344,6 +345,7 @@ function togglePinSlider(pin, annotationType) {
 			stop: function(event, ui) {
 				currentAnnotations[annotationUUID]['options']['startTime'] = ui.values[0];
 				currentAnnotations[annotationUUID]['options']['stopTime'] = ui.values[1];
+				saveAnnotation(annotationElement, annotationType);
 				youtubeClipVideoTimeLine(ui.values[0], ui.values[1]);
 			},
 			start: function(event, ui) {
