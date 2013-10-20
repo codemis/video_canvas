@@ -157,6 +157,23 @@ button.pin {
    
 }
 button.pin:hover {  border:3px solid #333;background:transparent url(<%= asset_path 'pushpin3.jpg' %>) no-repeat;}
+button.hide_user {
+    padding: 0px;
+   border:3px solid #13239a; 
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    /*background:transparent url(<%= asset_path 'pushpin2.jpg' %>) no-repeat;*/
+    height:36px;
+    width:36px;
+    margin-left:-9px;
+
+   
+}
+button.hide_user:hover {  
+    border:3px solid #333;
+    /*background:transparent url(<%= asset_path 'pushpin3.jpg' %>) no-repeat;*/
+}
 .pin_slider {
     margin-top: 5px;
     font-size: 12px;
@@ -187,3 +204,9 @@ footer hgroup h5, footer hgroup h6 {font-weight:400; font-size:12px; text-transf
 footer hgroup h4 span {font-weight:400; font-size:12px; line-height:10px;}
 footer hgroup h6 {color:black;}
 
+.ui-dialog.viewable .ui-dialog-titlebar-close {
+  display: none;
+}
+.ui-dialog.viewable .ui-dialog-title {
+    display: block;
+}
