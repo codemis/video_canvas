@@ -1,11 +1,17 @@
 <div id="choose_video_modal" class="modal hide fade" tabindex="-1" data-focus-on="input:first" style="display: none">
   <div class="modal-body">
-    <input type="text" class="youtube_url_input" placeholder="Input video url here">
-    <%= link_to "Submit", "#", class: "input_youtube_url_submit" %>
-    <br/>- or - <br/>
-    <input type="text" class="youtube_search" placeholder="Search for videos here">
-    <div class="search_results">
-    </div>
+
+    <% if current_user %>
+      <input type="text" class="youtube_url_input" placeholder="Input video url here">
+      <%= link_to "Submit", "#", class: "input_youtube_url_submit" %>
+      <br/>- or - <br/>
+      <input type="text" class="youtube_search" placeholder="Search for videos here">
+      <div class="search_results">
+      </div>
+    <% else %>
+      Please login or sign up to annotate videos.
+    <% end %>
+
   </div>
   <div class="modal-footer">
     <button type="button" data-dismiss="modal" class="btn">Close</button>

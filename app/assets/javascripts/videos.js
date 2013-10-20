@@ -77,7 +77,7 @@ $(document).ready(function(){
 			}
 			
 			else {
-				$(".search_results").html("<div id='no'>Sorry, No videos match your search query.</div>");
+				$(".search_results").html("<div class='there_is_nothing_to_display'>Sorry, No videos match your search query.</div>");
 				}
 			}
 
