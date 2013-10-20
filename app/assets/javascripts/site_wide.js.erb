@@ -64,16 +64,18 @@ function toggleToolBar() {
 	var img = $('#arrow');
 
 	if(el.hasClass('hide')){
+		$('#tab1').css('z-index', 55);
+		$('#tab2').css('z-index', 49);
 		$('#viewNav').hide();
 		$('#toolsNav').show('fast', function() {
 			el.addClass('show').removeClass('hide');
 			delay(img, "<%= asset_path('tb-icn-film.png') %>", 400);
-			$('#tab2').css('display','none');
+			$('#tab2').addClass('hide').removeClass('show');
 		});
 	}else{
 		el.addClass('hide').removeClass('show');
 		delay(img, "<%= asset_path('tb-icn-film.png') %>", 400);
-		$('#tab2').css('display','block');
+		$('#tab2').addClass('show').removeClass('hide');
 	};
 };
 /*
@@ -87,19 +89,18 @@ function toggleViewBar() {
 	var img = $('#arrow2');
 
 	if(el.hasClass('hide')){
+		$('#tab2').css('z-index', 55);
+		$('#tab1').css('z-index', 49);
 		$('#toolsNav').hide();
 		$('#viewNav').show('fast', function() {
 			el.addClass('show').removeClass('hide');
 			delay(img, "<%= asset_path('tb-icn-eye.png') %>", 400);
-			$('.tabs').css('padding-top', '136px');
-			$('#tab1').css('display','none');
+			$('#tab1').addClass('hide').removeClass('show');
 		});
 	}else{
 		el.addClass('hide').removeClass('show');
 		delay(img, "<%= asset_path('tb-icn-eye.png') %>", 400);
-		$('#tab2').removeClass('margin_top');
-		$('.tabs').css('padding-top','0px');
-		$('#tab1').css('display','block');
+		$('#tab1').addClass('show').removeClass('hide');
 	};
 };
 /*
