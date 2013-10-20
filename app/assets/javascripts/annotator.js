@@ -306,6 +306,8 @@ function scribbleDialogDeleteButtonPressed(ele) {
 	var currCanvas = dialog.find('.content').children('canvas');
 	var currID = currCanvas.attr('data-id');
 	if(currID) {
+		var dialogID = '#dialog-for-annotations-'+currID;
+		$(dialogID).dialog('close');
 		var currUUID = currCanvas.attr('data-uuid');
 		currentAnnotations[currUUID] = {};
 		if (hasDataID(currID)) {
