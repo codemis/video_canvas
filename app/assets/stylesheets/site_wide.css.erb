@@ -42,7 +42,7 @@ body {background:#f3f3f3 url(<%= asset_path 'bg-main.jpg' %>) ; font-family:'ban
 
 /* MAIN SHOW
 ****************/
-#text-fade-container {width:848px; margin:0 auto;}
+
 .canvasMain {
 	display:inline-block; width:1024px; margin:0 auto; border:1px solid pink; 
 }
@@ -53,11 +53,11 @@ body {background:#f3f3f3 url(<%= asset_path 'bg-main.jpg' %>) ; font-family:'ban
 **************************/
 
 .demo_video{width:950px; margin:0 auto;  padding: 20px;}
-.demo_video iframe {margin:0 auto; width:853px; display:block;}
+.demo_video iframe {margin:0 auto; width:640px; display:block;}
 
 .tagline {font: 900 24px/222%  'raleway', 'banda', Helvetica, sans-serif ;}
 #text-fade-content span {float:left; margin-left:9px; font: normal 22px/2.3em 'banda', Helvetica, sans-serif; color:#21c56a; text-shadow:1px 1px #307b7f,1px 1px #307b7f;}
-
+#text-fade-container {width:600px; margin:0 auto;}
 /* TOOL BAR
 ***************/
 
@@ -66,6 +66,8 @@ body {background:#f3f3f3 url(<%= asset_path 'bg-main.jpg' %>) ; font-family:'ban
 #toolBar hgroup h2 {font-size:13px;}
 #toolBar nav {background-color:#EAECEF; width:119px;box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15); }
 #toolBar nav a {display:block; height:50px; border-bottom:1px solid #fff; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15); }
+
+#toolsNav hgroup {padding: 10px 7px;}
 
 #toolBar{
     width: 189px;
@@ -119,7 +121,7 @@ body {background:#f3f3f3 url(<%= asset_path 'bg-main.jpg' %>) ; font-family:'ban
     position: relative;
 }
 
-.show, .hide{
+.show{
    
             transition: margin-left .4s ease-in;
     -webkit-transition: margin-left .4s ease-in;
@@ -127,12 +129,13 @@ body {background:#f3f3f3 url(<%= asset_path 'bg-main.jpg' %>) ; font-family:'ban
 
 .hide{
     margin-left:-123px !important;
-    margin-right:-70px;
+   margin-right:-65px;
 
 }
 
 .show{
     margin-left:0px;
+    margin-right:-191px;
     
 }
 

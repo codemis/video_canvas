@@ -55,7 +55,7 @@ function fadeText(text) {
 		next = text.parent().find(":first");	
 	};
 	/*picks random color from array*/
-	var colors = Array("#21c56a", "#31db77", "#24dc63", "3cb566", "#66d603", "#71f073", "12cd7c" );
+	var colors = Array("#2fbbac", "#44b773", "#24dc63", "#3cb566", "#57b206", "#71f073", "#2ca456", "#33b170", "#089885" );
 	pickColor = Math.floor(Math.random() * colors.length); 
 	//begin the fade. Fade in is 1 second long, holds for 3 seconds long, and then fade out lasts for 1 second. After fade out, the next span will do the fade.
 	$(text).css("color", colors[pickColor]).fadeIn(1000).delay(2500).fadeOut(1000, function() {fadeText(next);});
