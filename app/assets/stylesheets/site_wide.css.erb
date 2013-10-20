@@ -29,7 +29,7 @@
 .fright {float:right;}
 .fleft {float:left;}
 a {text-decoration:none;}
-body {background:#f3f3f3 url(<%= asset_path 'bg-main.jpg' %>); font-family:'banda', Helvetica, sans-serif;}
+body {background:#f3f3f3 url(<%= asset_path 'bg-main.jpg' %>) ; font-family:'banda', Helvetica, sans-serif;}
 
 
 /* GLOBAL NAV
@@ -142,18 +142,31 @@ div.ui-dialog-titlebar span.ui-dialog-title {
     display: none;
 }
 button.pin {
-    font-size: 0.6em;
-    background-color: yellow;
+    padding: 0px;
+   border:3px solid #13239a; 
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    background:transparent url(<%= asset_path 'pushpin2.jpg' %>) no-repeat;
+    height:36px;
+    width:36px;
+    margin-left:-9px;
+
+   
 }
+button.pin:hover {  border:3px solid #333;background:transparent url(<%= asset_path 'pushpin3.jpg' %>) no-repeat;}
 .pin_slider {
     margin-top: 5px;
-    font-size: 0.2em;
+    font-size: 12px;
 }
 div.slider_state {
     font-weight: bold;
     text-align: center;
     margin-top: 5px;
+    font-size: 12px;
+    margin-bottom:5px;
 }
+.ui-dialog-titlebar-close {border:3px solid red;}
 
 #toolLinks {background-color:#F3F3F3; width:98px;  width:119px; border-right:5px solid #bcc0c4; height:90%;}
 #toolLinks hgroup {height:150px;}
