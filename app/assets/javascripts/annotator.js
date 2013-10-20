@@ -112,7 +112,7 @@ function addNewScribbleAnnotation() {
 	}});
 	var titleBar = canvasDialog.parents('.ui-dialog').find('.ui-dialog-titlebar');
 	$(pinHTML).appendTo(titleBar).click(function(event) {
-		togglePinSlider($(this));
+		togglePinSlider($(this), 'scribble');
 	});
 	
 	resizeCanvas(canvasDialog.find('.content'));
@@ -190,11 +190,13 @@ function createScribbleCanvas(uuid) {
 		/*
 		 * Setup the Annotation data object for the Controller
 		 */
+		var startTime = (currentAnnotations[eleUUID]['options'].hasOwnProperty('startTime')) ? currentAnnotations[eleUUID]['options']['startTime'] : 0;
+		var stopTime = (currentAnnotations[eleUUID]['options'].hasOwnProperty('stopTime')) ? currentAnnotations[eleUUID]['options']['stopTime'] : videoDuration;
 		var annotationDataObject = { annotation: { 	scribble_data: canvasData, 
 													annotation_type: 'scribble', 
 													position: dialogPosition, 
-													start_time: 0, 
-													stop_time: 300
+													start_time: startTime, 
+													stop_time: stopTime
 												}
 									};
 		$.ajax({
@@ -285,10 +287,14 @@ function getDialogPosition(dialog) {
  * Toggle the pin slider
  *
  * @param Object pin the JQuery pin object
+ * @param String annotationType they type of annotation
  * @return void
  */
-function togglePinSlider(pin) {
+function togglePinSlider(pin, annotationType) {
 	var dialog = $(pin).parents('.ui-dialog').eq(0);
+	if (annotationType == 'scribble') {
+		var annotationUUID = dialog.find('canvas').data('uuid');
+	};
 	var dialogContent = dialog.find('div.ui-dialog-content').eq(0);
 	var sliderDiv = dialog.find('div.pin_slider').eq(0);
 	dialogHeight = dialog.height();
@@ -300,6 +306,16 @@ function togglePinSlider(pin) {
 		sliderDiv.addClass('hidden');
 		dialog.height(dialogHeight - sliderHeight);
 		dialogContent.height(dialogContentHeight - sliderHeight);
+		/*
+		 * Reset the start and stop times
+		 */
+		if (currentAnnotations[annotationUUID]['options'].hasOwnProperty('startTime')) {
+			currentAnnotations[annotationUUID]['options']['startTime'] = 0;
+		}
+		if (currentAnnotations[annotationUUID]['options'].hasOwnProperty('stopTime')) {
+			currentAnnotations[annotationUUID]['options']['stopTime'] = videoDuration;
+		}
+		
 	} else {
 		$(pin).attr('data-showing', 'YES');
 		$(pin).addClass('pinned').removeClass('unpinned');
@@ -313,6 +329,8 @@ function togglePinSlider(pin) {
 			max: videoDuration,
 			values: [0, videoDuration],
 			stop: function(event, ui) {
+				currentAnnotations[annotationUUID]['options']['startTime'] = ui.values[0];
+				currentAnnotations[annotationUUID]['options']['stopTime'] = ui.values[1];
 				youtubeClipVideoTimeLine(ui.values[0], ui.values[1]);
 			},
 			start: function(event, ui) {
