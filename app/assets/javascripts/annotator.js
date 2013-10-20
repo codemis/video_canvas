@@ -361,7 +361,6 @@ function saveAnnotation(ele, annotationType) {
 													video_id: videoID
 												}
 									};
-		console.log(annotationDataObject);
 		if(annotationType == 'scribble') {
 			annotationDataObject.annotation.scribble_data = ele[0].toDataURL("image/png");
 		}
@@ -373,6 +372,8 @@ function saveAnnotation(ele, annotationType) {
 			success: function(data) {
 				if (data.hasOwnProperty('id') && $.isNumeric(data.id)) {
 					ele.attr('data-id', data.id);
+					annotationQeue[data.id] = annotationDataObject;
+					console.log(annotationQeue);
 				} else {
 					console.log('Unable to save annotation.');
 					console.log(data);
