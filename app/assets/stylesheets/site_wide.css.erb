@@ -77,9 +77,9 @@ body {background:#f3f3f3 url(<%= asset_path 'bg-main.jpg' %>); font-family:'band
     height:100%;
 
 }
-#arrow, .bt{cursor: pointer;}
-#tab1{
-    float: right;
+#arrow, .bt, #arrow2{cursor: pointer;}
+#tab1, #tab2{
+    
     list-style: none outside none;
     margin: 50px 0 0 0;
     padding: 5px 5px 5px 0;
@@ -92,7 +92,8 @@ body {background:#f3f3f3 url(<%= asset_path 'bg-main.jpg' %>); font-family:'band
 	border-top-left-radius:0;
 	border-bottom-left-radius:0;
 	}
-#tab1 li {
+#tab2{margin:5px 0 0 0;}
+#tab1 li, #tab2 li {
 	border:1px solid white; 
 	padding:7px;  
     -webkit-border-radius: 3px;
@@ -108,7 +109,7 @@ body {background:#f3f3f3 url(<%= asset_path 'bg-main.jpg' %>); font-family:'band
 
 }
 
-#tab1 li span{
+#tab1 li span, #tab2 li span{
     display: block;
     padding: 0 5px;
     position: relative;
@@ -123,6 +124,7 @@ body {background:#f3f3f3 url(<%= asset_path 'bg-main.jpg' %>); font-family:'band
 
 .hide{
     margin-left:-123px;
+
 }
 
 .show{

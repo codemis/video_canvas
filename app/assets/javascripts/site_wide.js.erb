@@ -63,20 +63,27 @@ $(document).ready(function() {
 		function toggle(id) {
 		    var el = document.getElementById(id);
 		    var img = document.getElementById("arrow");
-		    var toolBar = el.getAttribute("class");
-		    if(toolBar == "hide"){
+		    var toolBarClass = el.getAttribute("class");
+		    
+		    if(toolBarClass == "hide"){
+		    	
 		        el.setAttribute("class", "show");
 		        delay(img, "<%= asset_path('tb-icn-film.png') %>", 400);
+		        $('#tab2').css('display','none');
 		    }
 		    else{
+		    	
 		        el.setAttribute("class", "hide");
 		        delay(img, "<%= asset_path('tb-icn-film.png') %>", 400);
+		       $('#tab2').css('display','block');
 		    }
 		}
 
+		
 		function delay(elem, src, delayTime){
-		    window.setTimeout(function() {elem.setAttribute("src", src);}, delayTime);
-	}
+    		window.setTimeout(function() {elem.setAttribute("src", src);}, delayTime);
+		}
+
 
 	/******  HOMEPAGE VIDEO *****/
 /*
