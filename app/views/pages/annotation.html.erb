@@ -1,19 +1,29 @@
 <!-- TOGGLE TOOLBAR -->
 <div id="toolBar" class="">
-    <ul id="tab1">
-        <li>
-	    <%= image_tag("tb-icn-film.png", height: "60px", id: "arrow", onclick: "toggle('toolBar');") %>
-        </li>
-    </ul>
+	<div class="tabs fright">
+	    <ul id="tab1">
+	        <li>
+		    <%= image_tag("tb-icn-film.png", height: "60px", id: "arrow", onclick: "toggle('toolBar');") %>
+	        </li>
+	    </ul>
+	    <ul id="tab2">
+	        <li>
+		    <%= image_tag("tb-icn-eye.png", height: "60px", id: "arrow2", onclick: "toggle('viewBar');") %>
+	        </li>
+	    </ul>
+	</div>
+
+    
+
     <div id="toolLinks">
-    <hgroup>
-    	<h1>Logo</h1>
-        <h2>Sketch, write, and share your ideas.</h2>
-    </hgroup>
+	    <hgroup>
+	    	<h1>Logo</h1>
+	        <h2>Sketch, write, and share your ideas.</h2>
+	    </hgroup>
         <nav>
-            <div class="bt">
-	      <%= link_to "#{image_tag('tb-icn-pencil.png', height: '40px')} Pen".html_safe, "", class: "trigger_scribble" %>
-	    </div>
+            <!--<div class="bt">
+	      		<%= link_to "#{image_tag('tb-icn-pencil.png', height: '40px')} Pen".html_safe, "", class: "trigger_scribble" %>
+	    	</div>-->
             <div class="bt"><a href="" >Txt</a></div>
             <div class="bt"><a href="" >Img</a></div>
             <div class="bt"><a href="" >A</a></div>
@@ -21,6 +31,16 @@
         </nav>
     </div>
 </div>
+
+
+
+
+
+
+
+
+
+
 
 
 <!-- MAIN CONTENT AREA -->
