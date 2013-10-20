@@ -5,26 +5,20 @@
   <div class="homeContainer">
     
     <div class="demo_video">
-
+      
       <div id="text-fade-container">
 	<p class="tagline fleft">Youtube just got a little more </p>
 	<div id="text-fade-content">
-	  <span>mustaches.</span>
-	  <span>fart clouds.</span>
-	  <span>stick figures.</span>
-	  <span>unibrows.</span>
-	  <span>angry eyes.</span>
-	  <span>lols.</span>
-	  <span>squiggly smell lines.</span>
-	  <span>crazy hats.</span>
-	  <span>eye patches.</span>
-	  <span>lightening bolts.</span>
-	  <span>hearts.</span>
+	  <% taglines.each do |word| %>
+	  <span><%= word -%>.</span>
+	  <% end -%>	
 	</div>
 	<div class="clear"></div>
       </div>
 
-      <iframe width="640" height="360" src="//www.youtube.com/embed/sBWPCvdv8Bk?autoplay=1&controls=0&showinfo=0&rel=0" frameborder="0" allowfullscreen></iframe>
+      <div id="overlay"><%= image_tag 'spacer.gif', id: 'overlay_image' %></div>
+      <iframe width="640" height="360" src="//www.youtube.com/embed/sBWPCvdv8Bk?autoplay=0&controls=0&showinfo=0&rel=0" frameborder="0" allowfullscreen></iframe>
+
       <div class="intro_text">
 	<strong>Now your turn.</strong> Start a 
 	<%= link_to "new canvas", "#", {:class => 'btn choose_video_modal '} %>  
@@ -32,11 +26,46 @@
 	through our exisiting public canvases and add your own layer.
       </div>
     </div>
-		
+    
   </div>    
   <%= image_tag("vc2.png", height: "117px", id: "vc2", class: "fright") %>
 </div>
 
-</div>
+<% content_for :footer do %>
+    <script type="text/javascript">
+        $(document).ready(function() {
+	overlays = <%= raw(overlay_images) %>;
+	$('#text-fade-content span').hide();
+	/*start fade on the first span*/
+	fadeText( $('#text-fade-content span:first'));
+        });
+
+	/*
+	* fades the text in and out
+	*
+	* @param String text the text to display
+	* @return void
+	*
+	*/
+	function fadeText(text) {
+	  /*get next span*/
+	  var next = text.next();
+	  /*if there is no next span, go back to the first span*/
+	  if ( next.length == 0 ) {
+  	    next = text.parent().find(":first");	
+	  };
+	  /* name the image overlay file for the text in ths spans; replace image when we change text */
+	  filekey = text[0].innerText.replace(/[ .]/g, '');
+	  $('img#overlay_image').attr('src', overlays[filekey]);
+
+	  /*picks random color from array*/
+	  var colors = Array("#2fbbac", "#44b773", "#24dc63", "#3cb566", "#57b206", "#71f073", "#2ca456", "#33b170", "#089885" );
+	  pickColor = Math.floor(Math.random() * colors.length); 
+	  //begin the fade. Fade in is 1 second long, holds for 3 seconds long, and then fade out lasts for 1 second. After fade out, the next span will do the fade.
+	  $(text).css("color", colors[pickColor]).fadeIn(1000).delay(2500).fadeOut(1000, function() {fadeText(next);});
+	};
+
+    </script>
+<% end %>
 
 	

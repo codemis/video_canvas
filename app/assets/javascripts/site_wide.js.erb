@@ -10,9 +10,6 @@ $.fn.exists = function(callback) {
 	return this;
 };
 $(document).ready(function() {
-	$('#text-fade-content span').hide();
-	/*start fade on the first span*/
-	fadeText( $('#text-fade-content span:first'));
 	/*
 	 * setup onclick methods
 	 *
@@ -40,26 +37,6 @@ $(document).ready(function() {
 	});	
 
 });
-/*
- * fades the text in and out
- *
- * @param String text the text to display
- * @return void
- *
- */
-function fadeText(text) {
-	/*get next span*/
-	var next = text.next();
-	/*if there is no next span, go back to the first span*/
-	if ( next.length == 0 ) {
-		next = text.parent().find(":first");	
-	};
-	/*picks random color from array*/
-	var colors = Array("#2fbbac", "#44b773", "#24dc63", "#3cb566", "#57b206", "#71f073", "#2ca456", "#33b170", "#089885" );
-	pickColor = Math.floor(Math.random() * colors.length); 
-	//begin the fade. Fade in is 1 second long, holds for 3 seconds long, and then fade out lasts for 1 second. After fade out, the next span will do the fade.
-	$(text).css("color", colors[pickColor]).fadeIn(1000).delay(2500).fadeOut(1000, function() {fadeText(next);});
-};
 /*
  * toggle the tool bar of the side Nav
  *
