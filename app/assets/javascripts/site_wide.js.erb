@@ -12,13 +12,25 @@ $.fn.exists = function(callback) {
 $(document).ready(function() {
 	$('#text-fade-content span').hide();
 	/*start fade on the first span*/
-	fadeText( $('#text-fade-content span:first') );
+	fadeText( $('#text-fade-content span:first'));
+	/*
+	 * setup onclick methods
+	 *
+	 */
+	 $('img#arrow').click(function(event) {
+	 	toggleToolBar();
+	 	return false;
+	 });
+	 $('img#arrow2').click(function(event) {
+	 	toggleViewBar();
+	 	return false;
+	 });
 	/*
 	 * toggle the toolbar
 	 *
 	 */
 	$('#toolBar').exists(function() {
-  		toggle('toolBar');
+  		toggleToolBar();
 	});
 });
 /*
@@ -42,25 +54,52 @@ function fadeText(text) {
 	$(text).css("color", colors[pickColor]).fadeIn(1000).delay(2500).fadeOut(1000, function() {fadeText(next);});
 };
 /*
- * toggle the object
+ * toggle the tool bar of the side Nav
  *
- * @param Object id the object to toggle
  * @return void
  *
  */
-function toggle(id) {
-	var el = document.getElementById(id);
-	var img = document.getElementById("arrow");
-	var toolBarClass = el.getAttribute("class");
+function toggleToolBar() {
+	var el = $('#toolBar');
+	var img = $('#arrow');
 
-	if(toolBarClass == "hide"){
-		el.setAttribute("class", "show");
-		delay(img, "<%= asset_path('tb-icn-film.png') %>", 400);
-		$('#tab2').css('display','none');
+	if(el.hasClass('hide')){
+		$('#viewNav').hide();
+		$('#toolsNav').show('fast', function() {
+			el.addClass('show').removeClass('hide');
+			delay(img, "<%= asset_path('tb-icn-film.png') %>", 400);
+			$('#tab2').css('display','none');
+		});
 	}else{
-		el.setAttribute("class", "hide");
+		el.addClass('hide').removeClass('show');
 		delay(img, "<%= asset_path('tb-icn-film.png') %>", 400);
 		$('#tab2').css('display','block');
+	};
+};
+/*
+ * toggle the view bar of the side Nav
+ *
+ * @return void
+ *
+ */
+function toggleViewBar() {
+	var el = $('#toolBar');
+	var img = $('#arrow2');
+
+	if(el.hasClass('hide')){
+		$('#toolsNav').hide();
+		$('#viewNav').show('fast', function() {
+			el.addClass('show').removeClass('hide');
+			delay(img, "<%= asset_path('tb-icn-eye.png') %>", 400);
+			$('.tabs').css('padding-top', '136px');
+			$('#tab1').css('display','none');
+		});
+	}else{
+		el.addClass('hide').removeClass('show');
+		delay(img, "<%= asset_path('tb-icn-eye.png') %>", 400);
+		$('#tab2').removeClass('margin_top');
+		$('.tabs').css('padding-top','0px');
+		$('#tab1').css('display','block');
 	};
 };
 /*
@@ -73,7 +112,7 @@ function toggle(id) {
  *
  */
 function delay(elem, src, delayTime){
-	window.setTimeout(function() {elem.setAttribute("src", src);}, delayTime);
+	window.setTimeout(function() {elem.attr("src", src);}, delayTime);
 };
 /*
  * Turn seconds into human readable standard
