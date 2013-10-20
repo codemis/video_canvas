@@ -238,7 +238,7 @@ footer hgroup h6 {color:black;}
 .ui-dialog.viewable .ui-dialog-title {
     display: block;
 }
-
+<<<<<<< HEAD
 .picker_1 {
     background-color: #119254;
     width: 119px;
@@ -262,6 +262,6 @@ footer hgroup h6 {color:black;}
             transition: margin-top .4s ease-in;
     -webkit-transition: margin-top .4s ease-in;
 }
-
+=======
 #vc2 {margin-top:-20px;}
-
+>>>>>>> renee
