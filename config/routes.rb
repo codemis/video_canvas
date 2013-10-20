@@ -11,6 +11,7 @@ Videocanvas::Application.routes.draw do
 
   root 'pages#home'
   put '/create_guest_user' => 'users#create_guest_user', as: :create_guest_user
+  get '/protected_contributions' => 'annotations#protected_contributions', as: :protected_contributions
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

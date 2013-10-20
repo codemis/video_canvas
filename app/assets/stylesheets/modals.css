@@ -1,0 +1,25 @@
+.modal input {
+    width: 80%;
+}
+
+#choose_video_modal {
+    /* width: 500px;*/
+    padding: 100px;
+}
+
+.modal-footer {
+    margin-top: 20px;
+}
+
+/* styles for videos returned from YouTube API */
+.search_results{
+	overflow: scroll;
+}
+
+.api_call_youtube {
+    font-size: 80%;
+}
+
+.api_call_youtube .video_title {
+    font-weight: bold;    
+}
