@@ -2,8 +2,7 @@
 <div id="toolBar" class="">
     <ul id="tab1">
         <li>
-            <img id="arrow" onclick="toggle('toolBar');" src="/assets/tb-icn-film.png" height="60"  />
-
+	    <%= image_tag('tb-icn-film.png', height: "60", id: "arrow", onclick: "toggle('toolBar');") %>
         </li>
     </ul>
     <div id="toolLinks">
@@ -12,7 +11,9 @@
         <h2>Sketch, write, and share your ideas.</h2>
     </hgroup>
         <nav>
-            <div class="bt"><a href="" class="trigger_scribble"><img src="/assets/tb-icn-pencil.png" height="40px" />Pen</a></div>
+            <div class="bt">
+	      <%= link_to "#{image_tag('tb-icn-pencil.png', height: '40px')} Pen".html_safe, "", class: "trigger_scribble" %>
+	    </div>
             <div class="bt"><a href="" >Txt</a></div>
             <div class="bt"><a href="" >Img</a></div>
             <div class="bt"><a href="" >A</a></div>
