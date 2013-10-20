@@ -44,16 +44,21 @@ $(document).ready(function() {
 		//if there is no next span, go back to the first span
 		if ( next.length == 0 ) {
 			next = text.parent().find(":first");
+			
 		}
-		
+
+		//picks random color from array
+		var colors = Array("#21c56a", "#31db77", "#24dc63", "3cb566", "#66d603", "#71f073", "12cd7c" );
+		pickColor = Math.floor(Math.random() * colors.length); 
+     
+
 		//begin the fade. Fade in is 1 second long, holds for 3 seconds long, and then fade out lasts for 1 second. After fade out, the next span will do the fade.
-		$(text).fadeIn(1000).delay(2000).fadeOut(1000, function() { fadeText( next ) } );
+		$(text).css("color", colors[pickColor]).fadeIn(1000).delay(2500).fadeOut(1000, function() { fadeText( next ) } );
 	}
 	
 
 
 	/**** TOOLBAR TOGGLE ****/
-	
 
 		function toggle(id) {
 		    var el = document.getElementById(id);
@@ -72,5 +77,8 @@ $(document).ready(function() {
 		function delay(elem, src, delayTime){
 		    window.setTimeout(function() {elem.setAttribute("src", src);}, delayTime);
 	}
+
+	/******  HOMEPAGE VIDEO *****/
+
 	
 	
