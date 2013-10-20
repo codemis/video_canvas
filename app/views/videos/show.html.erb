@@ -18,9 +18,9 @@
 	        <h2>Sketch, write, and share your ideas.</h2>
 	    </hgroup>
         <nav>
-            <!--<div class="bt">
+            <div class="bt">
 	      		<%= link_to "#{image_tag('tb-icn-pencil.png', height: '40px')} Pen".html_safe, "", class: "trigger_scribble" %>
-	    	</div>-->
+	    	</div>
             <div class="bt"><a href="" >Txt</a></div>
             <div class="bt"><a href="" >Img</a></div>
             <div class="bt"><a href="" >A</a></div>
@@ -45,9 +45,6 @@
 </div>
 <!-- MAIN CONTENT AREA -->
 <div class="canvasMain fleft">
-
-	<h2>Video Annotation</h2>
-	<a href="#" class="trigger_scribble">New Canvas</a>
     <div id="annotated_video" data-youtube-id="<%= @video.youtube_id %>" data-our-id="<%= @video.id %>"><div id="player"></div></div>
 
 </div> <!-- end MAIN -->

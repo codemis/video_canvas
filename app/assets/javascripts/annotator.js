@@ -41,7 +41,6 @@ var sliderHeight = 10;
 $(document).ready(function() {
 	$('a.trigger_scribble').click(function(event) {
 		addNewScribbleAnnotation();
-		aler()
 		return false;
 	});
 });
