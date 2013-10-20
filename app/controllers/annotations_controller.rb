@@ -12,6 +12,18 @@ class AnnotationsController < ApplicationController
 			format.json { render json: @annotation }
 		end
 	end
+
+	# GET /protected_contributions?video_id=2
+	#
+	#
+	def protected_contributions
+		annotation_ids = Annotation.where({video_id: params[:video_id], user_id: current_user.id}).collect(&:id)
+		annotation_object = {contributions: annotation_ids};
+
+		respond_to do |format|
+			format.json { render json: annotation_object.to_json }
+		end
+	end
 	
 	# POST /annotations
 	#

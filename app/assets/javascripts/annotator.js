@@ -153,21 +153,51 @@ function scribbleDialogCloseCallback(ele) {
  * @return void
  */
 function addExistingAnnotations(annotations) {
-	$.each(annotations, function(index, val) {
-		 if (val['annotation_type'] == 'scribble') {
-		 	addExistingScribbleAnnotation(val);
-		 };
+	var videoID = $('#annotated_video').attr('data-our-id');
+	$.ajax({
+		url: '/protected_contributions',
+		type: 'GET',
+		dataType: 'json',
+		data: {video_id: videoID},
+	}).done(function(data) {
+		var uintArray = data.contributions;
+		$.each(annotations, function(index, val) {
+			 if (val['annotation_type'] == 'scribble') {
+			 	if (($.isArray(uintArray)) && ($.inArray(val['id'], uintArray) === -1)) {
+			 		addExistingViewableScribbleAnnotation(val);
+			 	} else {
+			 		addExistingManagableScribbleAnnotation(val);
+			 	};
+			 };
+		});
+	}).fail(function() {
+		console.log("Unable to get protected ids.");
 	});
 };
+function addExistingViewableScribbleAnnotation(annotation) {
+	var canvas = $('<canvas/>').addClass('scribbleAnnotation').css({'cursor': 'pointer'});
+	canvas.attr('data-id', annotation.id);
+	var context = canvas[0].getContext('2d');
+	var canvasDialog = getDialogFrame(canvas);
+	var imageObj = new Image();
+	imageObj.onload = function() {
+	  context.drawImage(this, 0, 0);
+	};
+	imageObj.src = annotation.scribble_data;
+	$('body').append(canvasDialog);
+	positionHash = {at: 'left+'+annotation.position.x1+' top+'+annotation.position.y1, my: 'left top', of: $(document)};
+	canvasDialog.dialog({'height': annotation.position.height, width: annotation.position.width, position: positionHash, dialogClass: 'transparent viewable', draggable: false, resizable: false, title: annotation.contributor,closeOnEscape: false});
+	resizeCanvas(canvasDialog.find('.content'));
+};
 /*
- * Adds the existing Scribble Annotation to the page
+ * Adds the existing Scribble Annotation for managing to the page
  *
  * @param Hash Table annotation The annotation data to add
  * @return void
  *
  * @todo Might need to remove since it may be unnecessary, broken since I removed path from view
  */
-function addExistingScribbleAnnotation(annotation) {
+function addExistingManagableScribbleAnnotation(annotation) {
 	var uuid = addNewObjectToCurrentAnnotations('canvas', {'isDrawing': false, startTime: annotation.start_time, stopTime: annotation.stop_time});
 	var canvas = createScribbleCanvas(uuid);
 	canvas.attr('data-id', annotation.id);
