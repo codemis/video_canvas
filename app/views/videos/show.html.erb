@@ -48,7 +48,7 @@
 
 	<h2>Video Annotation</h2>
 	<a href="#" class="trigger_scribble">New Canvas</a>
-    <div id="annotated_video"><div id="player"></div></div>
+    <div id="annotated_video" data-youtube-id="<%= @video.youtube_id %>" data-our-id="<%= @video.id %>"><div id="player"></div></div>
 
 </div> <!-- end MAIN -->
 <div class="clear"></div>
@@ -56,7 +56,6 @@
     <script type="text/javascript">
         $(document).ready(function() {
             annotationsURL = "<%= annotations_path %>";
-            ytVideoID = "<%= @video.youtube_id %>";
         });
     </script>
 <% end %>

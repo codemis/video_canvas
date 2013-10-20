@@ -234,10 +234,12 @@ function saveAnnotation(ele, annotationType) {
 		 */
 		var startTime = (currentAnnotations[eleUUID]['options'].hasOwnProperty('startTime')) ? currentAnnotations[eleUUID]['options']['startTime'] : 0;
 		var stopTime = (currentAnnotations[eleUUID]['options'].hasOwnProperty('stopTime')) ? currentAnnotations[eleUUID]['options']['stopTime'] : videoDuration;
+		var videoID = $('#annotated_video').data('our-id');
 		var annotationDataObject = { annotation: { 	annotation_type: annotationType, 
 													position: dialogPosition, 
 													start_time: startTime, 
-													stop_time: stopTime
+													stop_time: stopTime,
+													video_id: videoID
 												}
 									};
 		if(annotationType == 'scribble') {
