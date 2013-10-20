@@ -25,6 +25,7 @@ var annotationsURL = "";
  */
 var getImageDataURL = "";
 var pinHTML = "<button class='pin'>/</button>";
+var sliderHeight = 20;
 /*
  * Document is ready
  *
@@ -257,7 +258,7 @@ function addNewObjectToCurrentAnnotations(typeOfAnnotation, options) {
  */
 function resizeCanvas(contentEle) {
 	var canvasParent = contentEle.parent();
-	contentEle.children('canvas').attr({'height': canvasParent.height(), 'width': canvasParent.width()});
+	contentEle.children('canvas').attr({'height': canvasParent.height() - 20, 'width': canvasParent.width()});
 };
 /*
  * Get the positioning of the dialog for saving
@@ -274,12 +275,32 @@ function getDialogPosition(dialog) {
 			};
 };
 function togglePinSlider(pin) {
+	var dialog = $(pin).parents('.ui-dialog').eq(0);
+	var dialogContent = dialog.find('div.ui-dialog-content').eq(0);
+	var sliderDiv = dialog.find('div.pin_slider').eq(0);
+	dialogHeight = dialog.height();
+	dialogContentHeight = dialogContent.height();
 	if (pin.attr('data-showing') == 'YES') {
 		$(pin).attr('data-showing', 'NO');
 		$(pin).addClass('unpinned').removeClass('pinned');
+		sliderDiv.addClass('hidden');
+		dialog.height(dialogHeight - sliderHeight);
+		dialogContent.height(dialogContentHeight - sliderHeight);
 	} else {
 		$(pin).attr('data-showing', 'YES');
 		$(pin).addClass('pinned').removeClass('unpinned');
+		sliderDiv.removeClass('hidden');
+		dialog.height(dialogHeight + sliderHeight);
+		dialogContent.height(dialogContentHeight + sliderHeight);
+		sliderDiv.children(".pin_slider_range").slider({
+			range: true,
+			min: 0,
+			max: videoDuration,
+			values: [0, videoDuration],
+			slide: function( event, ui ) {
+				console.log(ui.values[ 0 ] + " - " + ui.values[ 1 ]);
+			}
+	    });
 	};
 };
 /*
