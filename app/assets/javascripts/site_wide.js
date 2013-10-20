@@ -61,11 +61,11 @@ $(document).ready(function() {
 		    var toolBar = el.getAttribute("class");
 		    if(toolBar == "hide"){
 		        el.setAttribute("class", "show");
-		        delay(img, "/assets/cat.jpg", 400);
+		        delay(img, "/assets/tb-icn-film.png", 400);
 		    }
 		    else{
 		        el.setAttribute("class", "hide");
-		        delay(img, "/assets/cat.jpg", 400);
+		        delay(img, "/assets/tb-icn-film.png", 400);
 		    }
 		}
 
