@@ -171,51 +171,10 @@ function createScribbleCanvas(uuid) {
 	 *
 	 */
 	canvas.mouseup(function(event) {
-		var ele = $(this);
+		ele  = $(this);
+		saveAnnotation(ele, 'scribble');
 		var eleUUID = ele.data('uuid');
-		var eleID = ele.data('id');
-		var ajaxType = 'post';
-		var pathForID = '';
-		/*
-		 * Determine if we are creating or updating
-		 *
-		 */
-		if (hasDataID(eleID)) {
-			ajaxType = 'patch';
-			var pathForID = '/'+eleID;
-		};
-		var dialogPosition = getDialogPosition(ele.parents('div.ui-dialog'));
-		var canvasData = ele[0].toDataURL("image/png");
 		currentAnnotations[eleUUID]['options']['isDrawing'] = false;
-		/*
-		 * Setup the Annotation data object for the Controller
-		 */
-		var startTime = (currentAnnotations[eleUUID]['options'].hasOwnProperty('startTime')) ? currentAnnotations[eleUUID]['options']['startTime'] : 0;
-		var stopTime = (currentAnnotations[eleUUID]['options'].hasOwnProperty('stopTime')) ? currentAnnotations[eleUUID]['options']['stopTime'] : videoDuration;
-		var annotationDataObject = { annotation: { 	scribble_data: canvasData, 
-													annotation_type: 'scribble', 
-													position: dialogPosition, 
-													start_time: startTime, 
-													stop_time: stopTime
-												}
-									};
-		$.ajax({
-			url: annotationsURL+pathForID,
-			type: ajaxType,
-			data: annotationDataObject,
-			dataType: 'json',
-			success: function(data) {
-				if (data.hasOwnProperty('id') && $.isNumeric(data.id)) {
-					ele.attr('data-id', data.id);
-				} else {
-					console.log('Unable to save annotation.');
-					console.log(data);
-				};
-			},
-			error:function() {
-				console.log('Unable to save annotation.');
-			}
-		});
 		return false;
 	});
 	canvas.mouseout(function(event) {
@@ -245,6 +204,60 @@ function createScribbleCanvas(uuid) {
 		return false;
 	});
 	return canvas;
+};
+/*
+ * Save the annotation into the database
+ *
+ * @param Object ele the annotations JQuery Object
+ * @param String annotationType the type of annotation
+ *
+ * @return void
+ */
+function saveAnnotation(ele, annotationType) {
+		var eleUUID = ele.data('uuid');
+		var eleID = ele.data('id');
+		var ajaxType = 'post';
+		var pathForID = '';
+		/*
+		 * Determine if we are creating or updating
+		 *
+		 */
+		if (hasDataID(eleID)) {
+			ajaxType = 'patch';
+			var pathForID = '/'+eleID;
+		};
+		var dialogPosition = getDialogPosition(ele.parents('div.ui-dialog'));
+		/*
+		 * Setup the Annotation data object for the Controller
+		 */
+		var startTime = (currentAnnotations[eleUUID]['options'].hasOwnProperty('startTime')) ? currentAnnotations[eleUUID]['options']['startTime'] : 0;
+		var stopTime = (currentAnnotations[eleUUID]['options'].hasOwnProperty('stopTime')) ? currentAnnotations[eleUUID]['options']['stopTime'] : videoDuration;
+		var annotationDataObject = { annotation: { 	annotation_type: annotationType, 
+													position: dialogPosition, 
+													start_time: startTime, 
+													stop_time: stopTime
+												}
+									};
+		if(annotationType == 'scribble') {
+			annotationDataObject.annotation.scribble_data = ele[0].toDataURL("image/png");
+		}
+		$.ajax({
+			url: annotationsURL+pathForID,
+			type: ajaxType,
+			data: annotationDataObject,
+			dataType: 'json',
+			success: function(data) {
+				if (data.hasOwnProperty('id') && $.isNumeric(data.id)) {
+					ele.attr('data-id', data.id);
+				} else {
+					console.log('Unable to save annotation.');
+					console.log(data);
+				};
+			},
+			error:function() {
+				console.log('Unable to save annotation.');
+			}
+		});
 };
 /*
  * Adds the newObject details to the currentAnnotations var
