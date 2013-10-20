@@ -49,6 +49,7 @@ body {background:#f3f3f3 url(<%= asset_path 'bg-main.jpg' %>) ; font-family:'ban
 #annotated_video {margin:40px auto 0 auto; background: none repeat scroll 0 0 #FFFFFF;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15); width:480px; padding:15px;}
 
+
 /* HOME PAGE - DEMO VIDEO
 **************************/
 
@@ -57,11 +58,17 @@ body {background:#f3f3f3 url(<%= asset_path 'bg-main.jpg' %>) ; font-family:'ban
 
 .tagline {font: 900 24px/222%  'raleway', 'banda', Helvetica, sans-serif ;}
 #text-fade-content span {float:left; margin-left:9px; font: normal 22px/2.3em 'banda', Helvetica, sans-serif; color:#21c56a; text-shadow:1px 1px #307b7f,1px 1px #307b7f;}
-#text-fade-container {width:600px; margin:0 auto;}
+#text-fade-container {width:600px; margin:20px auto -50px auto;}
+
+.exampleVideo {position:relative; height:430px; width:700px; margin:0 auto;}
+#overlay{position:absolute; top:30px; z-index:900; left:-190px;}
+.wrapper1 {position:absolute;}
 
 .intro_text {margin:0 auto; width:640px; padding-top: 20px; padding-bottom: 50px; }
 .intro_text strong {font: 900 24px/222%  'raleway', 'banda', Helvetica, sans-serif; display: block;}
 .intro_text a { font: normal 22px/2.3em 'banda', Helvetica, sans-serif; color:#21c56a; }
+
+#voteSuckas {position:absolute; top:52px; right:0;}
 /* TOOL BAR
 ***************/
 
@@ -217,3 +224,4 @@ footer hgroup h6 {color:black;}
 .ui-dialog.viewable .ui-dialog-title {
     display: block;
 }
+#vc2 {margin-top:-20px;}
