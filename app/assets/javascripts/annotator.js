@@ -313,6 +313,9 @@ function togglePinSlider(pin) {
 			values: [0, videoDuration],
 			stop: function(event, ui) {
 				youtubeClipVideoTimeLine(ui.values[0], ui.values[1]);
+			},
+			start: function(event, ui) {
+				pausePlayer(ui.values[0], ui.values[1]);
 			}
 	    });
 	};

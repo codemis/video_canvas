@@ -5,10 +5,9 @@
  */
 var player;
 var videoDuration;
+var prevYtLoopStartTime = 0;
 var ytLoopStartTime = 0;
 var ytLoopEndTime = 0;
-var ytLoopingVideo = false;
-var ytLoopHasBeenStarted = false;
 var ytLoopTimer;
 $(document).ready(function() {
 	/*
@@ -50,31 +49,39 @@ function onYouTubePlayerReady(event) {
  * @return void
  */
 function youtubeClipVideoTimeLine(start, end) {
-	ytLoopingVideo = true;
-	if (ytLoopStartTime != start) {
-		console.log('Start Slider Moved');
-		var playerStatus = player.getPlayerState();
-		/* start slider moved */
-		if (playerStatus == 2) {
-			/* player paused */
-			player.playVideo();
-		} else if (playerStatus == 1) {
-			/* player playing */
-			player.seekTo(ytLoopStartTime, false);
-			ytLoopHasBeenStarted = true;
-			console.log('1) Starting Loop');
-		} else {
-			player.playVideo();
-		}
-	} else {
-		console.log('End Slider Moved');
-	}
+	prevYtLoopStartTime = ytLoopStartTime;
 	ytLoopStartTime = start;
 	ytLoopEndTime = end;
+	if (prevYtLoopStartTime != ytLoopStartTime) {
+		/* start slider moved */
+		startLoopClip();
+	}
 	if (ytLoopTimer == null) {
-		console.log('Setting Timer');
 		ytLoopTimer = window.setInterval(function(){timerCheckVideoState();}, 500);
 	};
+};
+/*
+ * Starts the loop clip
+ *
+ * @return void
+ */
+function startLoopClip() {
+	player.pauseVideo();
+	player.seekTo(ytLoopStartTime, true);
+	player.playVideo();
+};
+/*
+ * Pauses video if it meets the criteria
+ *
+ * @param Integer start The amount of seconds to start at
+ * @param Integer sec The amount of seconds to stop at
+ * @return void
+ */
+function pausePlayer(start, end) {
+	if (ytLoopStartTime != start) {
+		/*We have not altered the ending range*/
+		player.pauseVideo();
+	}
 };
 /*
  * A timer triggered to loop video
@@ -82,17 +89,9 @@ function youtubeClipVideoTimeLine(start, end) {
  * @return void
  */
 function timerCheckVideoState() {
-	console.log(ytLoopHasBeenStarted);
-	if ((player.getPlayerState() == 1) && (ytLoopHasBeenStarted === false)) {
-		/* player playing */
-		ytLoopHasBeenStarted = true;
-		player.seekTo(ytLoopStartTime, false);
-		console.log('2) Starting Loop');
-	} else {
-		var currentVideoTime = player.getCurrentTime();
-		if ((currentVideoTime >= ytLoopEndTime) && (ytLoopHasBeenStarted === true)) {
-			console.log('Restarting Loop');
-			ytLoopHasBeenStarted = false;
-		};
-	}
+	var currentVideoTime = player.getCurrentTime();
+	if (currentVideoTime >= ytLoopEndTime) {
+		pausePlayer();
+		startLoopClip();
+	};
 };
