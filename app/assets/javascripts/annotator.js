@@ -40,6 +40,7 @@ var sliderHeight = 10;
 $(document).ready(function() {
 	$('a.trigger_scribble').click(function(event) {
 		addNewScribbleAnnotation();
+		aler()
 		return false;
 	});
 });
@@ -171,51 +172,10 @@ function createScribbleCanvas(uuid) {
 	 *
 	 */
 	canvas.mouseup(function(event) {
-		var ele = $(this);
+		ele  = $(this);
+		saveAnnotation(ele, 'scribble');
 		var eleUUID = ele.data('uuid');
-		var eleID = ele.data('id');
-		var ajaxType = 'post';
-		var pathForID = '';
-		/*
-		 * Determine if we are creating or updating
-		 *
-		 */
-		if (hasDataID(eleID)) {
-			ajaxType = 'patch';
-			var pathForID = '/'+eleID;
-		};
-		var dialogPosition = getDialogPosition(ele.parents('div.ui-dialog'));
-		var canvasData = ele[0].toDataURL("image/png");
 		currentAnnotations[eleUUID]['options']['isDrawing'] = false;
-		/*
-		 * Setup the Annotation data object for the Controller
-		 */
-		var startTime = (currentAnnotations[eleUUID]['options'].hasOwnProperty('startTime')) ? currentAnnotations[eleUUID]['options']['startTime'] : 0;
-		var stopTime = (currentAnnotations[eleUUID]['options'].hasOwnProperty('stopTime')) ? currentAnnotations[eleUUID]['options']['stopTime'] : videoDuration;
-		var annotationDataObject = { annotation: { 	scribble_data: canvasData, 
-													annotation_type: 'scribble', 
-													position: dialogPosition, 
-													start_time: startTime, 
-													stop_time: stopTime
-												}
-									};
-		$.ajax({
-			url: annotationsURL+pathForID,
-			type: ajaxType,
-			data: annotationDataObject,
-			dataType: 'json',
-			success: function(data) {
-				if (data.hasOwnProperty('id') && $.isNumeric(data.id)) {
-					ele.attr('data-id', data.id);
-				} else {
-					console.log('Unable to save annotation.');
-					console.log(data);
-				};
-			},
-			error:function() {
-				console.log('Unable to save annotation.');
-			}
-		});
 		return false;
 	});
 	canvas.mouseout(function(event) {
@@ -245,6 +205,60 @@ function createScribbleCanvas(uuid) {
 		return false;
 	});
 	return canvas;
+};
+/*
+ * Save the annotation into the database
+ *
+ * @param Object ele the annotations JQuery Object
+ * @param String annotationType the type of annotation
+ *
+ * @return void
+ */
+function saveAnnotation(ele, annotationType) {
+		var eleUUID = ele.data('uuid');
+		var eleID = ele.data('id');
+		var ajaxType = 'post';
+		var pathForID = '';
+		/*
+		 * Determine if we are creating or updating
+		 *
+		 */
+		if (hasDataID(eleID)) {
+			ajaxType = 'patch';
+			var pathForID = '/'+eleID;
+		};
+		var dialogPosition = getDialogPosition(ele.parents('div.ui-dialog'));
+		/*
+		 * Setup the Annotation data object for the Controller
+		 */
+		var startTime = (currentAnnotations[eleUUID]['options'].hasOwnProperty('startTime')) ? currentAnnotations[eleUUID]['options']['startTime'] : 0;
+		var stopTime = (currentAnnotations[eleUUID]['options'].hasOwnProperty('stopTime')) ? currentAnnotations[eleUUID]['options']['stopTime'] : videoDuration;
+		var annotationDataObject = { annotation: { 	annotation_type: annotationType, 
+													position: dialogPosition, 
+													start_time: startTime, 
+													stop_time: stopTime
+												}
+									};
+		if(annotationType == 'scribble') {
+			annotationDataObject.annotation.scribble_data = ele[0].toDataURL("image/png");
+		}
+		$.ajax({
+			url: annotationsURL+pathForID,
+			type: ajaxType,
+			data: annotationDataObject,
+			dataType: 'json',
+			success: function(data) {
+				if (data.hasOwnProperty('id') && $.isNumeric(data.id)) {
+					ele.attr('data-id', data.id);
+				} else {
+					console.log('Unable to save annotation.');
+					console.log(data);
+				};
+			},
+			error:function() {
+				console.log('Unable to save annotation.');
+			}
+		});
 };
 /*
  * Adds the newObject details to the currentAnnotations var
@@ -293,7 +307,8 @@ function getDialogPosition(dialog) {
 function togglePinSlider(pin, annotationType) {
 	var dialog = $(pin).parents('.ui-dialog').eq(0);
 	if (annotationType == 'scribble') {
-		var annotationUUID = dialog.find('canvas').data('uuid');
+		var annotationElement = dialog.find('canvas');
+		var annotationUUID = annotationElement.data('uuid');
 	};
 	var dialogContent = dialog.find('div.ui-dialog-content').eq(0);
 	var sliderDiv = dialog.find('div.pin_slider').eq(0);
@@ -315,8 +330,23 @@ function togglePinSlider(pin, annotationType) {
 		if (currentAnnotations[annotationUUID]['options'].hasOwnProperty('stopTime')) {
 			currentAnnotations[annotationUUID]['options']['stopTime'] = videoDuration;
 		}
-		
+		$('span.start_time').text(toHHMMSS(0));
+		$('span.stop_time').text(toHHMMSS(videoDuration));
+		saveAnnotation(annotationElement, annotationType);
 	} else {
+		/*
+		 * Set the defaultstart and stop times
+		 */
+		if (currentAnnotations[annotationUUID]['options'].hasOwnProperty('startTime')) {
+			$('span.start_time').text(toHHMMSS(currentAnnotations[annotationUUID]['options']['startTime']));
+		} else {
+			$('span.start_time').text(toHHMMSS(0));
+		}
+		if (currentAnnotations[annotationUUID]['options'].hasOwnProperty('stopTime')) {
+			$('span.stop_time').text(toHHMMSS(currentAnnotations[annotationUUID]['options']['stopTime']));
+		} else {
+			$('span.stop_time').text(toHHMMSS(videoDuration));
+		}
 		$(pin).attr('data-showing', 'YES');
 		$(pin).addClass('pinned').removeClass('unpinned');
 		sliderDiv.removeClass('hidden');
@@ -331,10 +361,15 @@ function togglePinSlider(pin, annotationType) {
 			stop: function(event, ui) {
 				currentAnnotations[annotationUUID]['options']['startTime'] = ui.values[0];
 				currentAnnotations[annotationUUID]['options']['stopTime'] = ui.values[1];
+				saveAnnotation(annotationElement, annotationType);
 				youtubeClipVideoTimeLine(ui.values[0], ui.values[1]);
 			},
 			start: function(event, ui) {
 				pausePlayer(ui.values[0], ui.values[1]);
+			},
+			slide: function(event, ui) {
+				$('span.start_time').text(toHHMMSS(ui.values[0]));
+				$('span.stop_time').text(toHHMMSS(ui.values[1]));
 			}
 	    });
 	};
