@@ -1,3 +1,4 @@
+if (typeof console == "undefined" || typeof console.log == "undefined") var console = { log: function() {} }; 
 /* This file holds all the code for the annotation tools */
 /*
  * @param Hash Table Stores the current annotations on the page.  Key is a uuid.
