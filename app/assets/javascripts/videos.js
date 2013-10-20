@@ -5,8 +5,15 @@
 // Youtube API 
 $(document).ready(function(){
 	$('#choose_video_modal').modal({show: false});
+	$('#search_video_modal').modal({show: false});
+	
 	$('a.choose_video_modal').click(function(){
 		$('#choose_video_modal').modal('show');
+		return false;
+	});	
+
+	$('a.search_video_modal').click(function(){
+		$('#search_video_modal').modal('show');
 		return false;
 	});	
 	

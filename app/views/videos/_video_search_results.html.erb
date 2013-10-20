@@ -1,0 +1,7 @@
+<% if videos.present? %>
+	<% videos.each do |video| %>
+		<%= video.video_url %>
+	<% end %>
+<% else %>
+	There is nothing to display.
+<% end %>
