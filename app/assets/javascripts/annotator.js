@@ -103,6 +103,7 @@ function scribbleDialogResizeStopCallback(ele) {
 				data: {},
 			})
 			.done(function(data) {
+				saveAnnotation(contentCanvas, 'dcribble');
 				var context = contentCanvas[0].getContext('2d');
 				var imageObj = new Image();
 				imageObj.onload = function() {
