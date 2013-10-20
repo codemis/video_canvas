@@ -9,6 +9,7 @@ var prevYtLoopStartTime = 0;
 var ytLoopStartTime = 0;
 var ytLoopEndTime = 0;
 var ytLoopTimer;
+var ytVideoID;
 $(document).ready(function() {
 	/*
 	 * Append the Youtube iFrame API to javascript tags
@@ -26,7 +27,7 @@ function onYouTubeIframeAPIReady() {
 	player = new YT.Player('player', {
 		height: '360',
 		width: '480',
-		videoId: 'jofNR_WkoCE',
+		videoId: ytVideoID,
 		playerVars: {'rel': 0},
 		events: {
 			'onReady': onYouTubePlayerReady
