@@ -36,10 +36,10 @@
             <!--<div class="bt">
 	      		<%= link_to "#{image_tag('tb-icn-pencil.png', height: '40px')} Pen".html_safe, "", class: "trigger_scribble" %>
 	    	</div>-->
-            <div class="bt"><a href="" ><img src="http://placekitten.com/40/40">&nbsp;&nbsp;Joe</a></div>
-            <div class="bt"><a href="" ><img src="http://placekitten.com/40/40">&nbsp;&nbsp;Bob</a></a></div>
-            <div class="bt"><a href="" ><img src="http://placekitten.com/40/40">&nbsp;&nbsp;Sue</a></a></div>
-            <div class="bt"><a href="" ><img src="http://placekitten.com/40/40">&nbsp;&nbsp;Mary</a></a></div>
+            <% @video.users.each do |user| %>
+                <div class="bt"><a href="#" ><img src="http://robohash.org/<%= user.avatar_text %>.png?size=40x40">&nbsp;&nbsp;<%= truncate(user.username, length: 9) %></a></div>
+            <% end %>
+            
         </nav>
     </div>
 </div>

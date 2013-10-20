@@ -32,6 +32,13 @@ $(document).ready(function() {
 	$('#toolBar').exists(function() {
   		toggleToolBar();
 	});
+
+	$('#user_login_modal').modal({show: false});
+	$('a.login_modal').click(function(){
+		$('#user_login_modal').modal('show');
+		return false;
+	});	
+
 });
 /*
  * fades the text in and out
