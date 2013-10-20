@@ -22,9 +22,6 @@
 				
 			</li>
 			<li>
-				<%= link_to "Annotation", annotation_page_path %>
-			</li>
-			<li>
 				<%= link_to "Logout", destroy_user_session_path, method: :delete if current_user && !current_user.guest_user %>
 			</li>
 			<% if current_user %>
