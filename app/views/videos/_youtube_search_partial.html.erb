@@ -2,26 +2,32 @@
   <div class="modal-body">
 
     <% if current_user %>
-      <input type="text" class="youtube_url_input" placeholder="Input video url here">
+      Youtube URL:
+      <input type="text" class="youtube_url_input">
       <%= link_to "Submit", "#", class: "input_youtube_url_submit" %>
-      <br/>- or - <br/>
+      <br/>
+      <div class="center_text">
+        <br>
+        - or - 
+      </div>
+      <br/>
+      Search Youtube for videos:
       <input type="text" class="youtube_search" placeholder="Search for videos here">
+      <br><br>
       <div class="search_results">
       </div>
     <% else %>
-      Please login or sign up to annotate videos.
+      <div class="center_text">      
+        Please login or sign up to annotate videos.
+      </div>    
     <% end %>
 
-  </div>
-  <div class="modal-footer">
-    <button type="button" data-dismiss="modal" class="btn">Close</button>
   </div>
 </div>
 
 
-<div id="choose_privacy" class="modal hide fade" tabindex="-1" data-focus-on="input:first">
+<div id="choose_privacy" class="modal hide fade center_text" tabindex="-1" data-focus-on="input:first">
   <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3>Privacy Options</h3>
   </div>
   <div class="modal-body">
@@ -34,8 +40,8 @@
     <% end %>
 
     Do you want this video to be:<br/>
-    <%= link_to "Public", "#", class: "public_video_link" %>
+    <%= link_to "Public", "#", class: "public_video_link privacy_options_button" %>
     - or -
-    <%= link_to "Private", "#", class: "private_video_link" %>
+    <%= link_to "Private", "#", class: "private_video_link privacy_options_button" %>
   </div>
 </div>

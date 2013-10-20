@@ -9,6 +9,7 @@ class VideosController < ApplicationController
 		@video.youtube_id = params[:youtube_id]
 		@video.private = params[:private]
 		@video.title = params[:title]
+		@video.description = params[:description]
 		@video.video_url = "http://www.youtube.com/embed/#{params[:youtube_id]}"
 		respond_to do |format|
 			if @video.save
