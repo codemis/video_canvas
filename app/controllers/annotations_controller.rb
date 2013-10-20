@@ -43,8 +43,8 @@ class AnnotationsController < ApplicationController
 	def update
 		respond_to do |format|
 			passed_params = annotation_params
-			passed_params[:user] = User.first
-			passed_params[:video] = Video.first
+			passed_params[:user] = current_user
+			passed_params[:video] = Video.find(params[:annotation][:video_id])
 			if @annotation.update_attributes(passed_params)
 				unless @scribble_data.nil?
 					unless @annotation.save_scribble_image(@scribble_data)

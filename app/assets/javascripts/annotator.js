@@ -95,7 +95,7 @@ function scribbleDialogResizeStopCallback(ele) {
 	resizeCanvas(contentDiv);
 	var contentCanvas = contentDiv.children('canvas');
 	if (contentCanvas.length > 0) {
-		var currID = contentCanvas.data('id');
+		var currID = contentCanvas.attr('data-id');
 		if (hasDataID(currID)) {
 			/*
 			 * When the canvas is resized, we need to add the image back
@@ -108,7 +108,7 @@ function scribbleDialogResizeStopCallback(ele) {
 				data: {},
 			})
 			.done(function(data) {
-				saveAnnotation(contentCanvas, 'dcribble');
+				saveAnnotation(contentCanvas, 'scribble');
 				var context = contentCanvas[0].getContext('2d');
 				var imageObj = new Image();
 				imageObj.onload = function() {
@@ -256,8 +256,8 @@ function createScribbleCanvas(uuid) {
  * @return void
  */
 function saveAnnotation(ele, annotationType) {
-		var eleUUID = ele.data('uuid');
-		var eleID = ele.data('id');
+		var eleUUID = ele.attr('data-uuid');
+		var eleID = ele.attr('data-id');
 		var ajaxType = 'post';
 		var pathForID = '';
 		/*
@@ -282,6 +282,7 @@ function saveAnnotation(ele, annotationType) {
 													video_id: videoID
 												}
 									};
+		console.log(annotationDataObject);
 		if(annotationType == 'scribble') {
 			annotationDataObject.annotation.scribble_data = ele[0].toDataURL("image/png");
 		}
