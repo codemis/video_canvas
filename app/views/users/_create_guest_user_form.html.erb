@@ -2,22 +2,46 @@
 	<div class="modal-body">
 
 		<% if !current_user %>
-			<%= form_tag create_guest_user_path, method: :put do %>
 				<br>
-				<%= text_field_tag :username %>
+				<div class="sign_up_or_login_grid float_left">
+					<%= link_to "Sign in with Facebook", "/users/auth/facebook", class: "facebook_login_button" %><br/>
+				</div>
+				<div class="sign_up_or_login_grid float_left">
+					<%= link_to "Sign in with Twitter", "/users/auth/twitter", class: "twitter_login_button" %><br/>
+				</div>
+				<div class="sign_up_or_login_grid float_left">
+					<br>
+					<%= link_to "Sign in with Github", "/users/auth/github", class: "github_login_button" %><br/>
+				</div>
+				<div class="sign_up_or_login_grid float_left">
+					<%= form_tag create_guest_user_path, method: :put do %>
+						Sign in with guest username:
+						<%= text_field_tag :username %>
+						<br>
+						<%= submit_tag "Submit" %></div>
+					<% end %>
 				<br>
-				<%= submit_tag "Submit" %>
-				<br>
-				<%= link_to "Sign in with Twitter", "/users/auth/twitter" %><br/>
-				<%= link_to "Sign in with Github", "/users/auth/github" %><br/>
-				<%= link_to "Sign in with Facebook", "/users/auth/facebook" %><br/>
-			<% end %>
+				</div>
+
 		<% elsif current_user && current_user.guest_user %>
-			Currently signed in as Guest: <%= current_user.username %>
 			<br>
-			<%= link_to "Link your Twitter account", "/users/auth/twitter" %><br/>
-			<%= link_to "Link your Github account", "/users/auth/github" %><br/>
-			<%= link_to "Link your Facebook account", "/users/auth/facebook" %><br/>
+			<div class="sign_up_or_login_grid float_left">
+				<%= link_to "Link Facebook Account", "/users/auth/facebook", class: "facebook_login_button" %><br/>
+			</div>
+			<div class="sign_up_or_login_grid float_left">
+				<%= link_to "Link Twitter Account", "/users/auth/twitter", class: "twitter_login_button" %><br/>
+			</div>
+			<div class="sign_up_or_login_grid float_left">
+				<br>
+				<%= link_to "Link Github Account", "/users/auth/github", class: "github_login_button" %><br/>
+			</div>
+			<div class="sign_up_or_login_grid float_left">
+				<br>
+				Currently signed in as guest:
+				<br>
+				<%= current_user.username %>
+			<br>
+			</div>
 		<% end %>
 
 	</div>
