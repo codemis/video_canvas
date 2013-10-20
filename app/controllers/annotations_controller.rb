@@ -57,6 +57,7 @@ class AnnotationsController < ApplicationController
 			passed_params = annotation_params
 			passed_params[:user] = current_user
 			passed_params[:video] = Video.find(params[:annotation][:video_id])
+			params[:annotation].delete(:video_id)
 			if @annotation.update_attributes(passed_params)
 				unless @scribble_data.nil?
 					unless @annotation.save_scribble_image(@scribble_data)
