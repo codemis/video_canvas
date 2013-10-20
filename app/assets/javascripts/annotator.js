@@ -32,7 +32,7 @@ var pinHTML = "<button class='pin'>/</button>";
 /*
  * @param Integer The additional hheight for the slider
  */
-var sliderHeight = 20;
+var sliderHeight = 10;
 /*
  * Document is ready
  *
@@ -306,7 +306,8 @@ function togglePinSlider(pin) {
 		sliderDiv.removeClass('hidden');
 		dialog.height(dialogHeight + sliderHeight);
 		dialogContent.height(dialogContentHeight + sliderHeight);
-		sliderDiv.children(".pin_slider_range").slider({
+		var rangeSliderHolder = sliderDiv.children(".pin_slider_range");
+		rangeSliderHolder.slider({
 			range: true,
 			min: 0,
 			max: videoDuration,
