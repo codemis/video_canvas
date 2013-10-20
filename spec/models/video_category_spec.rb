@@ -16,4 +16,34 @@ describe VideoCategory do
   		FactoryGirl.build(:video_category, video_id: nil, category_id: nil).should_not be_valid
   	end
   end
+
+  describe "methods" do
+
+    it "when a video and a category name is passed in, it should create a valid video category between them" do
+      category = FactoryGirl.create(:category, name: "category", youtube_id: 123)
+      video = FactoryGirl.create(:video, video_url: "video url", youtube_id: "youtube_id")
+      video.video_categories.length.should == 0
+      VideoCategory.match_video_to_category(video, "category")
+      video.video_categories.length.should == 1
+      video.video_categories.first.category.should == category
+    end
+
+    it "should not create a video category between a video and a category if a category is not passed in " do
+      category = FactoryGirl.create(:category, name: "category", youtube_id: 123)
+      video = FactoryGirl.create(:video, video_url: "video url", youtube_id: "youtube_id")
+      video.video_categories.length.should == 0
+      VideoCategory.match_video_to_category(video)
+      video.video_categories.length.should == 0
+    end
+
+    it "should not create a video category if a category is passed in that is not in the database" do
+      category = FactoryGirl.create(:category, name: "category", youtube_id: 123)
+      video = FactoryGirl.create(:video, video_url: "video url", youtube_id: "youtube_id")
+      video.video_categories.length.should == 0
+      VideoCategory.match_video_to_category(video, "categorynotindatabse")
+      video.video_categories.length.should == 0
+    end
+
+
+  end
 end

@@ -18,9 +18,16 @@ this is the video show page
     <h3>Privacy Options</h3>
   </div>
   <div class="modal-body">
+    <%= form_tag videos_path, method: :post, class: "video_form" do %>
+      <%= hidden_field_tag :youtube_id %>
+      <%= hidden_field_tag :private %>
+      <%= hidden_field_tag :description %>
+      <%= hidden_field_tag :category %>
+    <% end %>
+
     Do you want this video to be:<br/>
-    <%= link_to "Public", "#", class: "public_video_link", method: :post %>
+    <%= link_to "Public", "#", class: "public_video_link" %>
     - or -
-    <%= link_to "Private", "#", class: "private_video_link", method: :post %>
+    <%= link_to "Private", "#", class: "private_video_link" %>
   </div>
 </div>
