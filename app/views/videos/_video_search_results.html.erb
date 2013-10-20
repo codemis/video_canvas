@@ -1,7 +1,26 @@
 <% if videos.present? %>
 	<% videos.each do |video| %>
-		<%= video.video_url %>
+
+		<div class="video_result">
+			<div class="video_result_image float_left">
+				<%= image_tag "http://img.youtube.com/vi/#{video.youtube_id}/0.jpg" %>
+			</div>
+			<div class="video_result_description">
+				Title: <br>
+				<%= video.title %>
+				<br>
+				Description: 
+				<br>
+				<%= video.description %>
+				<%= link_to "View Canvas", video_path(video), class: "float_right search_link_to_canvas" %>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<br/><br/>
+
 	<% end %>
 <% else %>
-	There is nothing to display.
+	<div class="there_is_nothing_to_display">
+		There is nothing to display.
+	</div>
 <% end %>

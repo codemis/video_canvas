@@ -19,12 +19,15 @@
 	    </hgroup>
         <nav>
             <div class="bt">
-	      		<%= link_to "#{image_tag('tb-icn-pencil.png', height: '40px')} Pen".html_safe, "", class: "trigger_scribble" %>
+                <% if current_user %>
+	      		   <%= link_to "#{image_tag('tb-icn-pencil.png', height: '40px')} Pen".html_safe, "", class: "trigger_scribble" %>
+                <% else %>
+                    <%= link_to "#{image_tag('tb-icn-pencil.png', height: '40px')} Pen".html_safe, "", class: "login_modal" %>
+                <% end %>
 	    	</div>
-            <div class="bt"><a href="" >Txt</a></div>
-            <div class="bt"><a href="" >Img</a></div>
-            <div class="bt"><a href="" >A</a></div>
-            <div class="bt"><a href="" >Clear</a></div>
+            <div class="bt"><a href="" class="pen_3" onclick="setBrushStroke(3, '#119254');return false;"><div class="picker_1">&nbsp;</div></a></div>
+            <div class="bt"><a href="" class="pen_5" onclick="setBrushStroke(3, '#4AEDD8');return false;"><div class="picker_2">&nbsp;</div></a></div>
+            <div class="bt"><a href="" class="pen_10" onclick="setBrushStroke(3, '#080574');return false;"><div class="picker_3">&nbsp;</div></a></div>
         </nav>
     </div>
     <div id="viewNav" class="hidden side_nav_links">

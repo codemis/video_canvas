@@ -29,13 +29,13 @@ var getImageDataURL = "";
  * @param String The HTML Markup for the dialog pin
  *
  */
-var pinHTML = "<button class='pin'></button>";
-var deleteHTML = "<button class='delete'>X</button>";
+var pinHTML = "<button class='pin' title='Pin to Timeline'></button>";
+var deleteHTML = "<button class='delete search_link_to_canvas' title='Delete Annotation'>X</button>";
 /*
  * @param String The HTML Markup for the dialog to hide users
  *
  */
-var hideHTML = "<button class='hide_user'>O</button>";
+var hideHTML = "";
 /*
  * @param Integer The additional hheight for the slider
  */
@@ -126,9 +126,9 @@ function createScribbleDialogModal(annotation, dialogType) {
 			scribbleDialogDeleteButtonPressed($(this));
 		});
 	} else if(dialogType == 'viewable') {
-		$(hideHTML).appendTo(titleBar).click(function(event) {
-			hideUser($(this));
-		});
+		// $(hideHTML).appendTo(titleBar).click(function(event) {
+		// 	hideUser($(this));
+		// });
 	}
 };
 function openDialogModal(currDialog, annotation) {
@@ -306,6 +306,8 @@ function scribbleDialogDeleteButtonPressed(ele) {
 	var currCanvas = dialog.find('.content').children('canvas');
 	var currID = currCanvas.attr('data-id');
 	if(currID) {
+		var dialogID = '#dialog-for-annotations-'+currID;
+		$(dialogID).dialog('close');
 		var currUUID = currCanvas.attr('data-uuid');
 		currentAnnotations[currUUID] = {};
 		if (hasDataID(currID)) {
@@ -359,7 +361,6 @@ function saveAnnotation(ele, annotationType) {
 													video_id: videoID
 												}
 									};
-		console.log(annotationDataObject);
 		if(annotationType == 'scribble') {
 			annotationDataObject.annotation.scribble_data = ele[0].toDataURL("image/png");
 		}
@@ -371,6 +372,8 @@ function saveAnnotation(ele, annotationType) {
 			success: function(data) {
 				if (data.hasOwnProperty('id') && $.isNumeric(data.id)) {
 					ele.attr('data-id', data.id);
+					annotationQeue[data.id] = annotationDataObject;
+					console.log(annotationQeue);
 				} else {
 					console.log('Unable to save annotation.');
 					console.log(data);
@@ -451,22 +454,22 @@ function togglePinSlider(pin, annotationType) {
 		if (currentAnnotations[annotationUUID]['options'].hasOwnProperty('stopTime')) {
 			currentAnnotations[annotationUUID]['options']['stopTime'] = videoDuration;
 		}
-		$('span.start_time').text(toHHMMSS(0));
-		$('span.stop_time').text(toHHMMSS(videoDuration));
+		sliderDiv.find('span.start_time').text(toHHMMSS(0));
+		sliderDiv.find('span.stop_time').text(toHHMMSS(videoDuration));
 		saveAnnotation(annotationElement, annotationType);
 	} else {
 		/*
 		 * Set the defaultstart and stop times
 		 */
 		if (currentAnnotations[annotationUUID]['options'].hasOwnProperty('startTime')) {
-			$('span.start_time').text(toHHMMSS(currentAnnotations[annotationUUID]['options']['startTime']));
+			sliderDiv.find('span.start_time').text(toHHMMSS(currentAnnotations[annotationUUID]['options']['startTime']));
 		} else {
-			$('span.start_time').text(toHHMMSS(0));
+			sliderDiv.find('span.start_time').text(toHHMMSS(0));
 		}
 		if (currentAnnotations[annotationUUID]['options'].hasOwnProperty('stopTime')) {
-			$('span.stop_time').text(toHHMMSS(currentAnnotations[annotationUUID]['options']['stopTime']));
+			sliderDiv.find('span.stop_time').text(toHHMMSS(currentAnnotations[annotationUUID]['options']['stopTime']));
 		} else {
-			$('span.stop_time').text(toHHMMSS(videoDuration));
+			sliderDiv.find('span.stop_time').text(toHHMMSS(videoDuration));
 		}
 		$(pin).attr('data-showing', 'YES');
 		$(pin).addClass('pinned').removeClass('unpinned');
@@ -489,8 +492,8 @@ function togglePinSlider(pin, annotationType) {
 				pausePlayer(ui.values[0], ui.values[1]);
 			},
 			slide: function(event, ui) {
-				$('span.start_time').text(toHHMMSS(ui.values[0]));
-				$('span.stop_time').text(toHHMMSS(ui.values[1]));
+				sliderDiv.find('span.start_time').text(toHHMMSS(ui.values[0]));
+				sliderDiv.find('span.stop_time').text(toHHMMSS(ui.values[1]));
 			}
 	    });
 	};
@@ -522,4 +525,8 @@ function createUUID() {
  */
 function hasDataID(dataID) {
 	return (typeof dataID !== 'undefined' && dataID !== false && $.isNumeric(dataID));
+};
+function setBrushStroke(stroke, color) {
+	canvasSettings['stroke'] = stroke;
+	canvasSettings['color'] = color;
 };

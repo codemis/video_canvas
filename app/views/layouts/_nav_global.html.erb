@@ -2,11 +2,11 @@
 	<%= link_to  image_tag('logo1.png', {:class =>'logo', :alt=>'logo'}), root_path, {:class => 'btn'} %>
   <div class="links fright">
     <%= link_to "New Canvas", "#", {:class => 'btn choose_video_modal '} %>
-    <%= link_to "Account", "#", {:class => 'btn'} %> 
     <%= link_to "Search", "#", {:class => 'btn search_video_modal'} %> 
     <%= link_to "Login / Sign Up", "#", {:class => 'btn login_modal'} unless current_user && current_user.guest_user == false %> 
     <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'btn' if current_user && current_user.guest_user == false %> 
-    <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'btn' if current_user%> 
+
+    <%= link_to "Signed in as Guest", "#", {:class => 'btn'} if current_user && current_user.guest_user%>
   </div>
   <div class="clear"></div>
 </nav>

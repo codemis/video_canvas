@@ -1,10 +1,48 @@
-.modal input {
-    width: 80%;
+#search_video_modal{
+	padding-left: 60px;
+	padding-top: 15px;
 }
-
+.search_videos_button{
+	margin-top: 15px;
+	margin-right: 70px;
+}
+.float_right{
+	float: right;
+}
+.float_left{
+	float: left;
+}
+.margin_auto{
+	margin: auto auto;
+}
+.modal input[type=text] {
+    width: 85%;
+    border-radius: 5px;
+    height: 20px;
+}
+.modal input.youtube_search{
+	width: 96%;
+}
+.modal select {
+    width: 86%;
+    height: 20px;
+    font-size: 16px;
+}
+.video_search_results_container .video_result{
+	width: 431px;
+}
+.video_result{
+	margin-bottom: 20px;
+	min-height: 75px;
+}
+.video_result img{
+	width: 100px;
+	float: left;
+	margin-right: 10px;
+}
 #choose_video_modal {
     /* width: 500px;*/
-    padding: 100px;
+    padding: 20px;
 }
 
 .modal-footer {
@@ -12,14 +50,83 @@
 }
 
 /* styles for videos returned from YouTube API */
-.search_results{
-	overflow: scroll;
-}
-
 .api_call_youtube {
     font-size: 80%;
+    width: 486px;
+}
+.api_call_youtube img{
+	width: 100px;
+	float: left;
+	margin-right: 10px;
 }
 
 .api_call_youtube .video_title {
     font-weight: bold;    
+}
+.center_text{
+	text-align: center;
+}
+.search_link_to_canvas{
+	padding: 10px 20px;
+	background-color: #299758;
+	border-radius: 3px;
+	border-bottom:3px solid #0a6568;
+	color:white;
+}
+.search_link_to_canvas:hover{
+	opacity: 0.8;
+}
+
+
+#choose_privacy{
+	padding: 20px 0px 20px 0px;
+}
+.youtube_search_choice{
+	padding: 5px 10px;
+	background-color: #299758;
+	border-radius: 3px;
+	border-bottom:3px solid #0a6568;
+	color:white;
+}
+.youtube_search_choice:hover{
+	opacity: 0.8;
+}
+.privacy_options_button{
+	padding: 0px 25px;
+	background-color: #299758;
+	border-radius: 3px;
+	border-bottom:3px solid #0a6568;
+	color:white;
+}
+.privacy_options_button:hover{
+	opacity: 0.8;
+}
+
+/*realated to the sign up / sign in modal*/
+.sign_up_or_login_grid{
+	width: 50%;
+	margin-bottom: 30px;
+	text-align: center;
+}
+.facebook_login_button{
+	padding: 5px 10px;
+	background-color: #3B5998;
+	border-radius: 3px;
+	border-bottom:3px solid #0a6568;
+	color:white;
+}
+.twitter_login_button{
+	background-color: #4099FF;
+	padding: 5px 10px;
+	border-radius: 3px;
+	border-bottom:3px solid #0a6568;
+	color:white;
+}
+.github_login_button{
+	margin-top: 10px;
+	background-color: #000000;
+	padding: 5px 10px;
+	border-radius: 3px;
+	border-bottom:3px solid #0a6568;
+	color:white;
 }
