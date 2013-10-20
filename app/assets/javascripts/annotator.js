@@ -24,7 +24,14 @@ var annotationsURL = "";
  *
  */
 var getImageDataURL = "";
+/*
+ * @param String The HTML Markup for the dialog pin
+ *
+ */
 var pinHTML = "<button class='pin'>/</button>";
+/*
+ * @param Integer The additional hheight for the slider
+ */
 var sliderHeight = 20;
 /*
  * Document is ready
