@@ -53,7 +53,7 @@ $(document).ready(function(){
 				var create_video_url = "/videos?youtube_id=" + video_id
 				var image_container="<img src="+thumb_url+" width='200' heigh='200'>";
 
-				var final="<div class='api_call_youtube'><div id='title'>"+video_title+"</div><br/>"+image_container+"<br/>"+video_viewCount+" Views<br/>" + "Description: <div class='description_container'>" + video_description+"</div> <br/> <a href='#choose_privacy' video_id="+video_id+" category="+video_category+" title="+video_title+" class='launch_privacy'> Choose this video </a></div><br/><br/>";
+				var final='<div class="api_call_youtube"><div class="video_title">'+video_title+"</div>"+image_container+'<br/><div class="view-count">'+video_viewCount+' Views</div>' + '<div class="description_container">' + video_description+"</div> <br/> <a href='#choose_privacy' video_id="+video_id+" category="+video_category+" title="+video_title+' class="launch_privacy"> Choose this video </a></div>';
 
 				$(".search_results").prepend(final); // Result
 				});
