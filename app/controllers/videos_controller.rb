@@ -5,11 +5,10 @@ class VideosController < ApplicationController
 	end
 
 	def create
-		puts params[:category]
-		puts "kasjdf;lkaj asdfj a;lskdfj ;alksdjf as;f "
 		@video = Video.new
 		@video.youtube_id = params[:youtube_id]
 		@video.private = params[:private]
+		@video.title = params[:title]
 		@video.video_url = "http://www.youtube.com/embed/#{params[:youtube_id]}"
 		respond_to do |format|
 			if @video.save
