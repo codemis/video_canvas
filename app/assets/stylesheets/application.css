@@ -10,5 +10,7 @@
  *
  *= require_self
  *= require reset
+ *= require bootstrap-modal-bs3patch
+ *= require bootstrap-modal
  *= require_tree .
  */
