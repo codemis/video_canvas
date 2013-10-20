@@ -1,1 +1,26 @@
 this is the video show page
+
+<button type="button" data-toggle="modal" data-target="#choose_video_modal" class="choose_video_modal">Launch modal</button>
+
+<div id="choose_video_modal" class="modal hide fade" tabindex="-1" data-focus-on="input:first">
+  <div class="modal-body">
+    
+  </div>
+  <div class="modal-footer">
+    <button type="button" data-dismiss="modal" class="btn">Close</button>
+  </div>
+</div>
+
+
+<div id="choose_privacy" class="modal hide fade" tabindex="-1" data-focus-on="input:first">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Privacy Options</h3>
+  </div>
+  <div class="modal-body">
+    Do you want this video to be:<br/>
+    <%= link_to "Public", "#", class: "public_video_link", method: :post %>
+    - or -
+    <%= link_to "Private", "#", class: "private_video_link", method: :post %>
+  </div>
+</div>
