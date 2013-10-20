@@ -78,6 +78,10 @@ after 'deploy:update_code' do
 
   # Compile Assets
   run "cd #{release_path}; RAILS_ENV=production bundle exec rake assets:precompile"
+
+  # We have a custom JQueryUI stylesheet which doesn't know about the asset pipeline
+  run "rm -r #{release_path}/public/assets/jquery_ui/*"
+  run "cp #{release_path}/app/assets/images/jquery_ui/* #{release_path}/public/assets/jquery_ui/"
 end
 
 # Restart Passenger
