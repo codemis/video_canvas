@@ -1,24 +1,35 @@
 
-<div id="voteSuckas"><%= link_to image_tag("vote.png", height: "169px", width: "169px", class: "fright"), "http://railsrumble.com/entries/213-video-canvas" %>
- 
+<div id="voteSuckas"><%= link_to image_tag("vote.png", height: "169px", width: "169px"), "http://railsrumble.com/entries/213-video-canvas" %>
+</div>
+
+
 
   <div class="homeContainer">
-    
+
     <div class="demo_video">
-      
-      <div id="text-fade-container">
-	<p class="tagline fleft">Youtube just got a little more </p>
-	<div id="text-fade-content">
-	  <% taglines.each do |word| %>
-	  <span><%= word -%>.</span>
-	  <% end -%>	
+      <div class="exampleVideo">
+	<div id="doodles">
+	  <div id="overlay">
+	    <%= image_tag 'spacer.gif', id: 'overlay_image', height: "741px", width: "1024px" %>
+	  </div>
 	</div>
-	<div class="clear"></div>
-      </div>
+	
+	<div class="wrapper1">
+	  <div id="text-fade-container">
+	    <p class="tagline fleft">Youtube just got a little more </p>
+	    <div id="text-fade-content">
+	      <% taglines.each do |word| %>
+	      <span><%= word -%>.</span>
+	      <% end -%>	
+	    </div>
+	    <div class="clear"></div>
+	  </div>
+    
+	  <iframe width="640" height="360" src="//www.youtube.com/embed/sBWPCvdv8Bk?autoplay=1&controls=0&showinfo=0&rel=0" frameborder="0" allowfullscreen></iframe>
 
-      <div id="overlay"><%= image_tag 'spacer.gif', id: 'overlay_image' %></div>
-      <iframe width="640" height="360" src="//www.youtube.com/embed/sBWPCvdv8Bk?autoplay=1&controls=0&showinfo=0&rel=0" frameborder="0" allowfullscreen></iframe>
-
+ 	</div><!-- end wrapper1 -->
+      </div><!-- end exampleVideo -->
+	
       <div class="intro_text">
 	<strong>Now your turn.</strong> Start a 
 	<%= link_to "new canvas", "#", {:class => 'btn choose_video_modal '} %>  
@@ -30,6 +41,7 @@
   </div>    
   <%= image_tag("vc2.png", height: "117px", id: "vc2", class: "fright") %>
 </div>
+
 
 <% content_for :footer do %>
     <script type="text/javascript">

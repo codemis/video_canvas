@@ -1,6 +1,7 @@
 module PagesHelper
   def taglines
-    ["mustaches", "fart clouds", "stick figures", "unibrows", "angry eyes", "lols", "squiggly smell lines", "crazy hats", "eye patches", "lightening bolts", "hearts"] 
+    # ["mustaches", "fart clouds", "stick figures", "unibrows", "angry eyes", "lols", "squiggly smell lines", "crazy hats", "eye patches", "lightening bolts", "hearts"] 
+    ["mustaches", "angry eyes", "hearts"] 
   end
   
   def overlay_images
