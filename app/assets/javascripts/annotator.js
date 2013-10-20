@@ -158,7 +158,6 @@ function addExistingAnnotations(annotations) {
 		 	addExistingScribbleAnnotation(val);
 		 };
 	});
-	console.log(currentAnnotations);
 };
 /*
  * Adds the existing Scribble Annotation to the page
