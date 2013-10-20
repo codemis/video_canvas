@@ -155,6 +155,23 @@ button.pin {
    
 }
 button.pin:hover {  border:3px solid #333;background:transparent url(<%= asset_path 'pushpin3.jpg' %>) no-repeat;}
+button.hide_user {
+    padding: 0px;
+   border:3px solid #13239a; 
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    /*background:transparent url(<%= asset_path 'pushpin2.jpg' %>) no-repeat;*/
+    height:36px;
+    width:36px;
+    margin-left:-9px;
+
+   
+}
+button.hide_user:hover {  
+    border:3px solid #333;
+    /*background:transparent url(<%= asset_path 'pushpin3.jpg' %>) no-repeat;*/
+}
 .pin_slider {
     margin-top: 5px;
     font-size: 12px;
@@ -176,7 +193,7 @@ div.slider_state {
 .side_nav_links {background-color:#F3F3F3; width:98px;  width:119px; border-right:5px solid #bcc0c4; height:90%;}
 #side_nav_links hgroup {height:150px;}
 .ui-dialog.viewable .ui-dialog-titlebar-close {
-  visibility: hidden;
+  display: none;
 }
 .ui-dialog.viewable .ui-dialog-title {
     display: block;

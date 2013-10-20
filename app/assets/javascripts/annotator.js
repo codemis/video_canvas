@@ -31,6 +31,11 @@ var getImageDataURL = "";
  */
 var pinHTML = "<button class='pin'></button>";
 /*
+ * @param String The HTML Markup for the dialog to hide users
+ *
+ */
+var hideHTML = "<button class='hide_user'>X</button>";
+/*
  * @param Integer The additional hheight for the slider
  */
 var sliderHeight = 10;
@@ -177,6 +182,7 @@ function addExistingAnnotations(annotations) {
 function addExistingViewableScribbleAnnotation(annotation) {
 	var canvas = $('<canvas/>').addClass('scribbleAnnotation').css({'cursor': 'pointer'});
 	canvas.attr('data-id', annotation.id);
+	canvas.attr('data-user-id', annotation.user_id);
 	var context = canvas[0].getContext('2d');
 	var canvasDialog = getDialogFrame(canvas);
 	var imageObj = new Image();
@@ -186,8 +192,16 @@ function addExistingViewableScribbleAnnotation(annotation) {
 	imageObj.src = annotation.scribble_data;
 	$('body').append(canvasDialog);
 	positionHash = {at: 'left+'+annotation.position.x1+' top+'+annotation.position.y1, my: 'left top', of: $(document)};
-	canvasDialog.dialog({'height': annotation.position.height, width: annotation.position.width, position: positionHash, dialogClass: 'transparent viewable', draggable: false, resizable: false, title: annotation.contributor,closeOnEscape: false});
+	canvasDialog.dialog({'height': annotation.position.height, width: annotation.position.width, position: positionHash, dialogClass: 'transparent viewable', draggable: false, resizable: false, title: annotation.contributor, closeOnEscape: false});
+	var titleBar = canvasDialog.parents('.ui-dialog').find('.ui-dialog-titlebar');
+	$(hideHTML).appendTo(titleBar).click(function(event) {
+		hideUser($(this));
+	});
+
 	resizeCanvas(canvasDialog.find('.content'));
+};
+function hideUser(ele) {
+
 };
 /*
  * Adds the existing Scribble Annotation for managing to the page
