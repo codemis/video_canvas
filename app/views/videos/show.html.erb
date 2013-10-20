@@ -19,7 +19,11 @@
 	    </hgroup>
         <nav>
             <div class="bt">
-	      		<%= link_to "#{image_tag('tb-icn-pencil.png', height: '40px')} Pen".html_safe, "", class: "trigger_scribble" %>
+                <% if current_user %>
+	      		   <%= link_to "#{image_tag('tb-icn-pencil.png', height: '40px')} Pen".html_safe, "", class: "trigger_scribble" %>
+                <% else %>
+                    <%= link_to "#{image_tag('tb-icn-pencil.png', height: '40px')} Pen".html_safe, "", class: "login_modal" %>
+                <% end %>
 	    	</div>
             <div class="bt"><a href="" >Txt</a></div>
             <div class="bt"><a href="" >Img</a></div>
