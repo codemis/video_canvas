@@ -14,7 +14,7 @@ var dialogStartingDimensions = {'h': 300, 'w': 300};
  * @param Hash Table Stores the settings for the Canvas writing tools
  *
  */
-var canvasSettings = {'stroke': 3, 'color': 'blue'};
+var canvasSettings = {'stroke': 3, 'color': '#25c176'};
 /*
  * @param String The URL for saving a canvas image
  *
@@ -29,7 +29,7 @@ var getImageDataURL = "";
  * @param String The HTML Markup for the dialog pin
  *
  */
-var pinHTML = "<button class='pin'>/</button>";
+var pinHTML = "<button class='pin'></button>";
 /*
  * @param Integer The additional hheight for the slider
  */
