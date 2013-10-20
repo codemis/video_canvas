@@ -526,3 +526,7 @@ function createUUID() {
 function hasDataID(dataID) {
 	return (typeof dataID !== 'undefined' && dataID !== false && $.isNumeric(dataID));
 };
+function setBrushStroke(stroke, color) {
+	canvasSettings['stroke'] = stroke;
+	canvasSettings['color'] = color;
+};

@@ -21,8 +21,9 @@
             <div class="bt">
 	      		<%= link_to "#{image_tag('tb-icn-pencil.png', height: '40px')} Pen".html_safe, "", class: "trigger_scribble" %>
 	    	</div>
-            <div class="bt"><a href="" >Txt</a></div>
-            <div class="bt"><a href="" >Img</a></div>
+            <div class="bt"><a href="" class="pen_3" onclick="setBrushStroke(3, 'blue');return false;">Pen 3</a></div>
+            <div class="bt"><a href="" class="pen_5" onclick="setBrushStroke(5, 'red');return false;">Pen 5</a></div>
+            <div class="bt"><a href="" class="pen_10" onclick="setBrushStroke(10, 'black');return false;">Pen 10</a></div>
             <div class="bt"><a href="" >A</a></div>
             <div class="bt"><a href="" >Clear</a></div>
         </nav>
