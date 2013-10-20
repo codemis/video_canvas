@@ -29,13 +29,13 @@ var getImageDataURL = "";
  * @param String The HTML Markup for the dialog pin
  *
  */
-var pinHTML = "<button class='pin'></button>";
-var deleteHTML = "<button class='delete'>X</button>";
+var pinHTML = "<button class='pin' title='Pin to Timeline'></button>";
+var deleteHTML = "<button class='delete search_link_to_canvas' title='Delete Annotation'>X</button>";
 /*
  * @param String The HTML Markup for the dialog to hide users
  *
  */
-var hideHTML = "<button class='hide_user'>O</button>";
+var hideHTML = "";
 /*
  * @param Integer The additional hheight for the slider
  */
@@ -126,9 +126,9 @@ function createScribbleDialogModal(annotation, dialogType) {
 			scribbleDialogDeleteButtonPressed($(this));
 		});
 	} else if(dialogType == 'viewable') {
-		$(hideHTML).appendTo(titleBar).click(function(event) {
-			hideUser($(this));
-		});
+		// $(hideHTML).appendTo(titleBar).click(function(event) {
+		// 	hideUser($(this));
+		// });
 	}
 };
 function openDialogModal(currDialog, annotation) {
