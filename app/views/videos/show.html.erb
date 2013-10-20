@@ -53,6 +53,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             annotationsURL = "<%= annotations_path %>";
+            addExistingAnnotations(<%= @video.annotations.to_json.html_safe %>);
         });
     </script>
 <% end %>

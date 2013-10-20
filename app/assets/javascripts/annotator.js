@@ -66,50 +66,9 @@ function addNewScribbleAnnotation() {
 	var canvasDialog = getDialogFrame(canvas);
 	$('body').append(canvasDialog);
 	canvasDialog.dialog({'height': dialogStartingDimensions['h'], width: dialogStartingDimensions['w'], 'resizeStop': function(event, ui){
-		var contentDiv = $(this).find('.content');
-		resizeCanvas(contentDiv);
-		var contentCanvas = contentDiv.children('canvas');
-		if (contentCanvas.length > 0) {
-			var currID = contentCanvas.data('id');
-			if (hasDataID(currID)) {
-				/*
-				 * When the canvas is resized, we need to add the image back
-				 *
-				 */
-				console.log(annotationsURL+'/'+currID);
-				$.ajax({
-					url: annotationsURL+'/'+currID,
-					type: 'get',
-					dataType: 'json',
-					data: {},
-				})
-				.done(function(data) {
-					var context = contentCanvas[0].getContext('2d');
-					var imageObj = new Image();
-					imageObj.onload = function() {
-						context.drawImage(this, 0, 0);
-					};
-					imageObj.src = data.scribble_data;
-				})
-				.fail(function() {
-					console.log("Unable to find the Annotation #"+currID);
-				});
-			};
-		};
+		scribbleDialogResizeStopCallback($(this));
 	}, dialogClass: 'transparent', 'close': function(event, ui) {
-		var currCanvas = $(this).find('.content').children('canvas');
-		var currID = currCanvas.data('id');
-		if (hasDataID(currID)) {
-			$.ajax({
-				url: annotationsURL+"/"+currID,
-				type: 'delete',
-				dataType: 'json',
-				data: {},
-			})
-			.fail(function() {
-				console.log("Unable to delete the annotation id: "+currID);
-			});
-		};
+		scribbleDialogCloseCallback($(this));
 	}});
 	var titleBar = canvasDialog.parents('.ui-dialog').find('.ui-dialog-titlebar');
 	$(pinHTML).appendTo(titleBar).click(function(event) {
@@ -119,6 +78,67 @@ function addNewScribbleAnnotation() {
 	resizeCanvas(canvasDialog.find('.content'));
 };
 /*
+ * The dialog callback for resizeStop
+ *
+ * @param Object ele the dialog JQuery element
+ *
+ * @return void
+ */
+function scribbleDialogResizeStopCallback(ele) {
+	var contentDiv = ele.find('.content');
+	resizeCanvas(contentDiv);
+	var contentCanvas = contentDiv.children('canvas');
+	if (contentCanvas.length > 0) {
+		var currID = contentCanvas.data('id');
+		if (hasDataID(currID)) {
+			/*
+			 * When the canvas is resized, we need to add the image back
+			 *
+			 */
+			console.log(annotationsURL+'/'+currID);
+			$.ajax({
+				url: annotationsURL+'/'+currID,
+				type: 'get',
+				dataType: 'json',
+				data: {},
+			})
+			.done(function(data) {
+				var context = contentCanvas[0].getContext('2d');
+				var imageObj = new Image();
+				imageObj.onload = function() {
+					context.drawImage(this, 0, 0);
+				};
+				imageObj.src = data.scribble_data;
+			})
+			.fail(function() {
+				console.log("Unable to find the Annotation #"+currID);
+			});
+		};
+	};
+};
+/*
+ * The dialog callback for close
+ *
+ * @param Object ele the dialog JQuery element
+ *
+ * @return void
+ */
+function scribbleDialogCloseCallback(ele) {
+	var currCanvas = ele.find('.content').children('canvas');
+	var currID = currCanvas.data('id');
+	if (hasDataID(currID)) {
+		$.ajax({
+			url: annotationsURL+"/"+currID,
+			type: 'delete',
+			dataType: 'json',
+			data: {},
+		})
+		.fail(function() {
+			console.log("Unable to delete the annotation id: "+currID);
+		});
+	};
+};
+/*
  * Iterates over existing annotations and adds them to the page
  *
  * @param Array annotations the array of annotations
@@ -126,10 +146,11 @@ function addNewScribbleAnnotation() {
  */
 function addExistingAnnotations(annotations) {
 	$.each(annotations, function(index, val) {
-		 if (val['annotation_type'] == 'canvas') {
+		 if (val['annotation_type'] == 'scribble') {
 		 	addExistingScribbleAnnotation(val);
 		 };
 	});
+	console.log(currentAnnotations);
 };
 /*
  * Adds the existing Scribble Annotation to the page
@@ -140,22 +161,28 @@ function addExistingAnnotations(annotations) {
  * @todo Might need to remove since it may be unnecessary, broken since I removed path from view
  */
 function addExistingScribbleAnnotation(annotation) {
-	$.get(getImageDataURL, {image_path: annotation['path']}, function(data) {
-		var uuid = addNewObjectToCurrentAnnotations('canvas', {'isDrawing': false});
-		var canvas = createScribbleCanvas(uuid);
-		var context = canvas[0].getContext('2d');
-		var canvasDialog = getDialogFrame(canvas);
-		var imageObj = new Image();
-        imageObj.onload = function() {
-          context.drawImage(this, 0, 0);
-        };
-        imageObj.src = data['image_data'];
-		$('body').append(canvasDialog);
-		positionHash = {at: 'left+'+annotation['position']['x1']+' top+'+annotation['position']['y1'], my: 'left top', of: $(document)};
-		canvasDialog.dialog({height: annotation['position']['height'], width: annotation['position']['width'], position: positionHash, 'resizeStop': function(event, ui){
-			resizeCanvas($(this).find('.content'));
-		}, dialogClass: 'transparent'});
-	}, 'json');
+	var uuid = addNewObjectToCurrentAnnotations('canvas', {'isDrawing': false, startTime: annotation.start_time, stopTime: annotation.stop_time});
+	var canvas = createScribbleCanvas(uuid);
+	var context = canvas[0].getContext('2d');
+	var canvasDialog = getDialogFrame(canvas);
+	var imageObj = new Image();
+	imageObj.onload = function() {
+	  context.drawImage(this, 0, 0);
+	};
+	imageObj.src = annotation.scribble_data;
+	$('body').append(canvasDialog);
+	positionHash = {at: 'left+'+annotation.position.x1+' top+'+annotation.position.y1, my: 'left top', of: $(document)};
+	canvasDialog.dialog({'height': annotation.position.height, width: annotation.position.width, position: positionHash, 'resizeStop': function(event, ui){
+		scribbleDialogResizeStopCallback($(this));
+	}, dialogClass: 'transparent', 'close': function(event, ui) {
+		scribbleDialogCloseCallback($(this));
+	}});
+	var titleBar = canvasDialog.parents('.ui-dialog').find('.ui-dialog-titlebar');
+	$(pinHTML).appendTo(titleBar).click(function(event) {
+		togglePinSlider($(this), 'scribble');
+	});
+	
+	resizeCanvas(canvasDialog.find('.content'));
 };
 /*
  * Create a canvas for scribbling
@@ -233,7 +260,7 @@ function saveAnnotation(ele, annotationType) {
 		 */
 		var startTime = (currentAnnotations[eleUUID]['options'].hasOwnProperty('startTime')) ? currentAnnotations[eleUUID]['options']['startTime'] : 0;
 		var stopTime = (currentAnnotations[eleUUID]['options'].hasOwnProperty('stopTime')) ? currentAnnotations[eleUUID]['options']['stopTime'] : videoDuration;
-		var videoID = $('#annotated_video').data('our-id');
+		var videoID = $('#annotated_video').attr('data-our-id');
 		var annotationDataObject = { annotation: { 	annotation_type: annotationType, 
 													position: dialogPosition, 
 													start_time: startTime, 
