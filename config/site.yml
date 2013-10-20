@@ -1,0 +1,17 @@
+defaults: &DEFAULTS
+ :twitter_id: nD8Y1JbHY4bbuGhpmRl0A
+ :twitter_secret: FWmJdlf574lHxZX9f6MIP4o8InhaTvVr3Kc12JBTiOE
+ :github_id: a3aca79a613d9170a32b
+ :github_secret: ea53b0d0e827c6a606c481b06143b92f13abfddc
+ :facebook_id: 396976757095765
+ :facebook_secret: f5f32296cc592a61b5012ade0e167883
+ :youtube_apikey: AIzaSyARYPv5iRMVO1HXy9gKxXN3EX4QIYONkvw
+
+development:
+ <<: *DEFAULTS
+
+test:
+ <<: *DEFAULTS
+
+production:
+ <<: *DEFAULTS
