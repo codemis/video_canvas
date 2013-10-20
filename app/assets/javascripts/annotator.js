@@ -30,7 +30,7 @@ var getImageDataURL = "";
  *
  */
 var pinHTML = "<button class='pin' title='Pin to Timeline'></button>";
-var deleteHTML = "<button class='delete search_link_to_canvas' title='Delete Annotation'>X</button>";
+var deleteHTML = "<button class='delete search_link_to_canvas' title='Delete Annotation'>&#9986;</button>";
 /*
  * @param String The HTML Markup for the dialog to hide users
  *
