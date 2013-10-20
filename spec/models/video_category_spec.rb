@@ -36,12 +36,12 @@ describe VideoCategory do
       video.video_categories.length.should == 0
     end
 
-    it "should not create a video category if a category is passed in that is not in the database" do
+    it "should create the category and video category if a category is passed in that is not in the database" do
       category = FactoryGirl.create(:category, name: "category", youtube_id: 123)
       video = FactoryGirl.create(:video, video_url: "video url", youtube_id: "youtube_id")
       video.video_categories.length.should == 0
       VideoCategory.match_video_to_category(video, "categorynotindatabse")
-      video.video_categories.length.should == 0
+      video.video_categories.length.should == 1
     end
 
 

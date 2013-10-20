@@ -5,6 +5,8 @@ class VideosController < ApplicationController
 	end
 
 	def create
+		puts params[:category]
+		puts "kasjdf;lkaj asdfj a;lskdfj ;alksdjf as;f "
 		@video = Video.new
 		@video.youtube_id = params[:youtube_id]
 		@video.private = params[:private]
