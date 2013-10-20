@@ -1,12 +1,13 @@
 <div id="search_video_modal" class="modal hide fade" tabindex="-1" data-focus-on="input:first" style="display: none">
   <div class="modal-body">
     <%= form_tag videos_path, method: :get, remote: true do %>
-      <%= text_field_tag :title %>
+      <%= text_field_tag :title, "", placeholder: "Search by title" %>
+      <br/><br/>
+      <%= select_tag :category, options_for_select(Category.order(:name).map{|cat| cat.name}), {:prompt => "Select Category"} %>
       <br/>
-      <%= select_tag :category, options_for_select(Category.order(:name).map{|cat| cat.name}), {:include_blank => true} %>
-      <br/>
-      <%= submit_tag "Search!" %>
+      <%= submit_tag "Search!", class: "search_videos_button float_right" %>
     <% end %>
+    <br/><br/>
     <div class="video_search_results_container">
       <!--  render "videos/video_search_results", :locals => { :videos => @videos }   -->
     </div>

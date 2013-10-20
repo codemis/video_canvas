@@ -51,16 +51,16 @@ $(document).ready(function(){
 				var video_category=data.category;
 				var video_description = data.description;
 				var create_video_url = "/videos?youtube_id=" + video_id
-				var image_container="<img src="+thumb_url+" width='200' heigh='200'>";
+				var image_container="<img src="+thumb_url+" width='100' heigh='100'>";
 
-				var final='<div class="api_call_youtube"><div class="video_title">'+video_title+"</div>"+image_container+'<br/><div class="view-count">'+video_viewCount+' Views</div>' + '<div class="description_container">' + video_description+"</div> <br/> <a href='#choose_privacy' video_id="+video_id+" category="+video_category+" title="+video_title+' class="launch_privacy"> Choose this video </a></div>';
+				var final='<div class="api_call_youtube">'+image_container + 'Title: <div class="video_title">'+video_title+"</div><br>" + 'Description: <div class="description_container">' + video_description+"</div> <a href='#choose_privacy' video_id="+video_id+" category="+video_category+" title="+video_title+' class="launch_privacy float_right youtube_search_choice"> Choose this video </a><br><br></div><br>';
 
 				$(".search_results").prepend(final); // Result
 				});
 				$('.launch_privacy').click(function(){
 					$('input#youtube_id').val($(this).attr('video_id'));
 					$('input#category').val($(this).attr('category'));
-					$('input#title').val($(this).attr('title'));
+					$('input#title').val($(this).parent('.api_call_youtube').find('.video_title').text());
 					$('input#description').val($(this).parent('.api_call_youtube').find('.description_container').text());
 					// the following sets the private boolean for a video record and submits the hidden form.
 					$('.public_video_link').click(function(){
@@ -77,7 +77,7 @@ $(document).ready(function(){
 			}
 			
 			else {
-				$(".search_results").html("<div id='no'>Sorry, No videos match your search query.</div>");
+				$(".search_results").html("<div class='there_is_nothing_to_display'>Sorry, No videos match your search query.</div>");
 				}
 			}
 
