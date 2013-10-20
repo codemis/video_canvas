@@ -69,6 +69,12 @@ function addNewScribbleAnnotation() {
 		scribbleDialogResizeStopCallback($(this));
 	}, dialogClass: 'transparent', 'close': function(event, ui) {
 		scribbleDialogCloseCallback($(this));
+	}, 'dragStop': function(event, ui) {
+		var contentCanvas = $(this).find('canvas');
+		var currID = contentCanvas.attr('data-id');
+		if (hasDataID(currID)) {
+			saveAnnotation(contentCanvas, 'scribble');
+		}
 	}});
 	var titleBar = canvasDialog.parents('.ui-dialog').find('.ui-dialog-titlebar');
 	$(pinHTML).appendTo(titleBar).click(function(event) {
@@ -95,7 +101,6 @@ function scribbleDialogResizeStopCallback(ele) {
 			 * When the canvas is resized, we need to add the image back
 			 *
 			 */
-			console.log(annotationsURL+'/'+currID);
 			$.ajax({
 				url: annotationsURL+'/'+currID,
 				type: 'get',
@@ -180,6 +185,12 @@ function addExistingScribbleAnnotation(annotation) {
 		scribbleDialogResizeStopCallback($(this));
 	}, dialogClass: 'transparent', 'close': function(event, ui) {
 		scribbleDialogCloseCallback($(this));
+	}, 'dragStop': function(){
+		var contentCanvas = $(this).find('canvas');
+		var currID = contentCanvas.attr('data-id');
+		if (hasDataID(currID)) {
+			saveAnnotation(contentCanvas, 'scribble');
+		}
 	}});
 	var titleBar = canvasDialog.parents('.ui-dialog').find('.ui-dialog-titlebar');
 	$(pinHTML).appendTo(titleBar).click(function(event) {
