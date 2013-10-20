@@ -9,8 +9,9 @@ describe Category do
 
   	it "should not create a valid category record with the name of the category or youtube_id missing." do
   		FactoryGirl.build(:category, name: nil, youtube_id: 123).should_not be_valid
-  		FactoryGirl.build(:category, name: "asdf", youtube_id: nil).should_not be_valid
-  		FactoryGirl.build(:category, name: nil, youtube_id: nil).should_not be_valid
+      # no longer validating the presence of youtube id
+  		# FactoryGirl.build(:category, name: "asdf", youtube_id: nil).should_not be_valid
+  		# FactoryGirl.build(:category, name: nil, youtube_id: nil).should_not be_valid
   	end
 
   end
