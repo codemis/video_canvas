@@ -281,6 +281,12 @@ function getDialogPosition(dialog) {
 				height: dialog.height()
 			};
 };
+/*
+ * Toggle the pin slider
+ *
+ * @param Object pin the JQuery pin object
+ * @return void
+ */
 function togglePinSlider(pin) {
 	var dialog = $(pin).parents('.ui-dialog').eq(0);
 	var dialogContent = dialog.find('div.ui-dialog-content').eq(0);
@@ -288,6 +294,7 @@ function togglePinSlider(pin) {
 	dialogHeight = dialog.height();
 	dialogContentHeight = dialogContent.height();
 	if (pin.attr('data-showing') == 'YES') {
+		window.clearInterval(ytLoopTimer);
 		$(pin).attr('data-showing', 'NO');
 		$(pin).addClass('unpinned').removeClass('pinned');
 		sliderDiv.addClass('hidden');
@@ -304,8 +311,8 @@ function togglePinSlider(pin) {
 			min: 0,
 			max: videoDuration,
 			values: [0, videoDuration],
-			slide: function( event, ui ) {
-				console.log(ui.values[ 0 ] + " - " + ui.values[ 1 ]);
+			stop: function(event, ui) {
+				youtubeClipVideoTimeLine(ui.values[0], ui.values[1]);
 			}
 	    });
 	};
