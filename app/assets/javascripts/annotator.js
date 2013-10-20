@@ -125,7 +125,9 @@ function scribbleDialogResizeStopCallback(ele) {
  */
 function scribbleDialogCloseCallback(ele) {
 	var currCanvas = ele.find('.content').children('canvas');
-	var currID = currCanvas.data('id');
+	var currID = currCanvas.attr('data-id');
+	var currUUID = currCanvas.attr('data-uuid');
+	currentAnnotations[currUUID] = {};
 	if (hasDataID(currID)) {
 		$.ajax({
 			url: annotationsURL+"/"+currID,
@@ -163,6 +165,7 @@ function addExistingAnnotations(annotations) {
 function addExistingScribbleAnnotation(annotation) {
 	var uuid = addNewObjectToCurrentAnnotations('canvas', {'isDrawing': false, startTime: annotation.start_time, stopTime: annotation.stop_time});
 	var canvas = createScribbleCanvas(uuid);
+	canvas.attr('data-id', annotation.id);
 	var context = canvas[0].getContext('2d');
 	var canvasDialog = getDialogFrame(canvas);
 	var imageObj = new Image();

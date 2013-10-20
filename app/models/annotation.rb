@@ -5,7 +5,7 @@ class Annotation < ActiveRecord::Base
 	store_accessor :position, :y1
 	store_accessor :position, :height
 	store_accessor :position, :width
-	attr_accessor :scribble_data
+	attr_accessor :scribble_data, :contributor
 
 	belongs_to :user
 	belongs_to :video
@@ -35,9 +35,15 @@ class Annotation < ActiveRecord::Base
 		end
 	end
 
+	# Added a contributor field for to_json
+	#
+	def contributor
+		self.user.username
+	end
+
 	# Add addition params to JSON by overriding as_json
 	#
 	def as_json(options)
-		super(methods: [:scribble_data])
+		super(methods: [:scribble_data, :contributor])
 	end
 end
