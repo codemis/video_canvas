@@ -1,91 +1,120 @@
-$(document).ready(function() {
-
-
-/**** FADE TAGLINE ****/
-		//hide all spans
-		$('#text-fade-content span').hide();
-		
-		//start fade on the first span
-		fadeText( $('#text-fade-content span:first') );
-
-
-
-/**** TOOLBAR TOGGLE ****/
-	
-
-	$('#toolBar').exists(function() {
-  		toggle('toolBar');
-	});
-
-
-
-});
-
-
-	/**** FADES THE TAGLINE WORDS ****/
-
-	//Check if it exists function
-	$.fn.exists = function(callback) {
-		  var args = [].slice.call(arguments, 1);
-
-		  if (this.length) {
-		    callback.call(this, args);
-		  }
-
-		  return this;
-		};
-
-	// Fade the text function
-	function fadeText(text) {
-	
-		//get next span
-		var next = text.next();
-		
-		//if there is no next span, go back to the first span
-		if ( next.length == 0 ) {
-			next = text.parent().find(":first");
-			
-		}
-
-		//picks random color from array
-		var colors = Array("#21c56a", "#31db77", "#24dc63", "3cb566", "#66d603", "#71f073", "12cd7c" );
-		pickColor = Math.floor(Math.random() * colors.length); 
-     
-
-		//begin the fade. Fade in is 1 second long, holds for 3 seconds long, and then fade out lasts for 1 second. After fade out, the next span will do the fade.
-		$(text).css("color", colors[pickColor]).fadeIn(1000).delay(2500).fadeOut(1000, function() { fadeText( next ) } );
+/*
+ * function to check if element exists
+ *
+ */
+$.fn.exists = function(callback) {
+	var args = [].slice.call(arguments, 1);
+	if (this.length) {
+		callback.call(this, args);
 	}
-	
+	return this;
+};
+$(document).ready(function() {
+	$('#text-fade-content span').hide();
+	/*start fade on the first span*/
+	fadeText( $('#text-fade-content span:first'));
+	/*
+	 * setup onclick methods
+	 *
+	 */
+	 $('img#arrow').click(function(event) {
+	 	toggleToolBar();
+	 	return false;
+	 });
+	 $('img#arrow2').click(function(event) {
+	 	toggleViewBar();
+	 	return false;
+	 });
+	/*
+	 * toggle the toolbar
+	 *
+	 */
+	$('#toolBar').exists(function() {
+  		toggleToolBar();
+	});
+});
+/*
+ * fades the text in and out
+ *
+ * @param String text the text to display
+ * @return void
+ *
+ */
+function fadeText(text) {
+	/*get next span*/
+	var next = text.next();
+	/*if there is no next span, go back to the first span*/
+	if ( next.length == 0 ) {
+		next = text.parent().find(":first");	
+	};
+	/*picks random color from array*/
+	var colors = Array("#21c56a", "#31db77", "#24dc63", "3cb566", "#66d603", "#71f073", "12cd7c" );
+	pickColor = Math.floor(Math.random() * colors.length); 
+	//begin the fade. Fade in is 1 second long, holds for 3 seconds long, and then fade out lasts for 1 second. After fade out, the next span will do the fade.
+	$(text).css("color", colors[pickColor]).fadeIn(1000).delay(2500).fadeOut(1000, function() {fadeText(next);});
+};
+/*
+ * toggle the tool bar of the side Nav
+ *
+ * @return void
+ *
+ */
+function toggleToolBar() {
+	var el = $('#toolBar');
+	var img = $('#arrow');
 
+	if(el.hasClass('hide')){
+		$('#tab1').css('z-index', 55);
+		$('#tab2').css('z-index', 49);
+		$('#viewNav').hide();
+		$('#toolsNav').show('fast', function() {
+			el.addClass('show').removeClass('hide');
+			delay(img, "<%= asset_path('tb-icn-film.png') %>", 400);
+			$('#tab2').addClass('hide').removeClass('show');
+		});
+	}else{
+		el.addClass('hide').removeClass('show');
+		delay(img, "<%= asset_path('tb-icn-film.png') %>", 400);
+		$('#tab2').addClass('show').removeClass('hide');
+	};
+};
+/*
+ * toggle the view bar of the side Nav
+ *
+ * @return void
+ *
+ */
+function toggleViewBar() {
+	var el = $('#toolBar');
+	var img = $('#arrow2');
 
-	/**** TOOLBAR TOGGLE ****/
-
-		function toggle(id) {
-		    var el = document.getElementById(id);
-		    var img = document.getElementById("arrow");
-		    var toolBarClass = el.getAttribute("class");
-		    
-		    if(toolBarClass == "hide"){
-		    	
-		        el.setAttribute("class", "show");
-		        delay(img, "<%= asset_path('tb-icn-film.png') %>", 400);
-		        $('#tab2').css('display','none');
-		    }
-		    else{
-		    	
-		        el.setAttribute("class", "hide");
-		        delay(img, "<%= asset_path('tb-icn-film.png') %>", 400);
-		       $('#tab2').css('display','block');
-		    }
-		}
-
-		
-		function delay(elem, src, delayTime){
-    		window.setTimeout(function() {elem.setAttribute("src", src);}, delayTime);
-		}
-
-
-	/******  HOMEPAGE VIDEO *****/
+	if(el.hasClass('hide')){
+		$('#tab2').css('z-index', 55);
+		$('#tab1').css('z-index', 49);
+		$('#toolsNav').hide();
+		$('#viewNav').show('fast', function() {
+			el.addClass('show').removeClass('hide');
+			delay(img, "<%= asset_path('tb-icn-eye.png') %>", 400);
+			$('#tab1').addClass('hide').removeClass('show');
+		});
+	}else{
+		el.addClass('hide').removeClass('show');
+		delay(img, "<%= asset_path('tb-icn-eye.png') %>", 400);
+		$('#tab1').addClass('show').removeClass('hide');
+	};
+};
+/*
+ * delay the image display
+ *
+ * @param Object elem the image to delay
+ * @param String src the source path of the image
+ * @param Integer delayTime number of seconds to delay it for
+ * @return void
+ *
+ */
+function delay(elem, src, delayTime){
+	window.setTimeout(function() {elem.attr("src", src);}, delayTime);
+};
 /*
  * Turn seconds into human readable standard
  *
@@ -97,13 +126,9 @@ function toHHMMSS(givenSeconds) {
     var hours   = Math.floor(sec_num / 3600);
     var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
     var seconds = sec_num - (hours * 3600) - (minutes * 60);
-
-    if (hours   < 10) {hours   = "0"+hours;}
-    if (minutes < 10) {minutes = "0"+minutes;}
-    if (seconds < 10) {seconds = "0"+seconds;}
+    if (hours   < 10) {hours   = "0"+hours;};
+    if (minutes < 10) {minutes = "0"+minutes;};
+    if (seconds < 10) {seconds = "0"+seconds;};
     var time    = hours+':'+minutes+':'+seconds;
     return time;
-}
-
-	
-	
+};

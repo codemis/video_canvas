@@ -65,7 +65,7 @@ body {background:#f3f3f3 url(<%= asset_path 'bg-main.jpg' %>); font-family:'band
 #toolBar nav a {display:block; height:50px; border-bottom:1px solid #fff; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15); }
 
 #toolBar{
-    width: 190px;
+    width: 189px;
     font-size: 12px;
     line-height: 20px;
     left: -260px;
@@ -84,13 +84,14 @@ body {background:#f3f3f3 url(<%= asset_path 'bg-main.jpg' %>); font-family:'band
     margin: 50px 0 0 0;
     padding: 5px 5px 5px 0;
     position: relative;
-    z-index: 99;
+    z-index: 49;
     background-color: #bcc0c4;
     -webkit-border-radius: 6px;
 	-moz-border-radius: 6px;
 	border-radius: 6px;
 	border-top-left-radius:0;
 	border-bottom-left-radius:0;
+    width: 65px;
 	}
 #tab2{margin:5px 0 0 0;}
 #tab1 li, #tab2 li {
@@ -115,7 +116,6 @@ body {background:#f3f3f3 url(<%= asset_path 'bg-main.jpg' %>); font-family:'band
     position: relative;
 }
 
-
 .show, .hide{
    
             transition: margin-left .4s ease-in;
@@ -123,7 +123,7 @@ body {background:#f3f3f3 url(<%= asset_path 'bg-main.jpg' %>); font-family:'band
 }
 
 .hide{
-    margin-left:-123px;
+    margin-left:-123px !important;
 
 }
 
@@ -155,6 +155,11 @@ div.slider_state {
     margin-top: 5px;
 }
 
-#toolLinks {background-color:#F3F3F3; width:98px;  width:119px; border-right:5px solid #bcc0c4; height:90%;}
-#toolLinks hgroup {height:150px;}
+#toolsNav, #viewNav {
+    position: relative;
+    z-index: 50;
+}
+
+.side_nav_links {background-color:#F3F3F3; width:98px;  width:119px; border-right:5px solid #bcc0c4; height:90%;}
+#side_nav_links hgroup {height:150px;}
 
