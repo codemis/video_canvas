@@ -40,6 +40,7 @@ var sliderHeight = 10;
 $(document).ready(function() {
 	$('a.trigger_scribble').click(function(event) {
 		addNewScribbleAnnotation();
+		aler()
 		return false;
 	});
 });
@@ -329,8 +330,23 @@ function togglePinSlider(pin, annotationType) {
 		if (currentAnnotations[annotationUUID]['options'].hasOwnProperty('stopTime')) {
 			currentAnnotations[annotationUUID]['options']['stopTime'] = videoDuration;
 		}
+		$('span.start_time').text(toHHMMSS(0));
+		$('span.stop_time').text(toHHMMSS(videoDuration));
 		saveAnnotation(annotationElement, annotationType);
 	} else {
+		/*
+		 * Set the defaultstart and stop times
+		 */
+		if (currentAnnotations[annotationUUID]['options'].hasOwnProperty('startTime')) {
+			$('span.start_time').text(toHHMMSS(currentAnnotations[annotationUUID]['options']['startTime']));
+		} else {
+			$('span.start_time').text(toHHMMSS(0));
+		}
+		if (currentAnnotations[annotationUUID]['options'].hasOwnProperty('stopTime')) {
+			$('span.stop_time').text(toHHMMSS(currentAnnotations[annotationUUID]['options']['stopTime']));
+		} else {
+			$('span.stop_time').text(toHHMMSS(videoDuration));
+		}
 		$(pin).attr('data-showing', 'YES');
 		$(pin).addClass('pinned').removeClass('unpinned');
 		sliderDiv.removeClass('hidden');
@@ -350,6 +366,10 @@ function togglePinSlider(pin, annotationType) {
 			},
 			start: function(event, ui) {
 				pausePlayer(ui.values[0], ui.values[1]);
+			},
+			slide: function(event, ui) {
+				$('span.start_time').text(toHHMMSS(ui.values[0]));
+				$('span.stop_time').text(toHHMMSS(ui.values[1]));
 			}
 	    });
 	};
