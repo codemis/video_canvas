@@ -101,3 +101,32 @@
 .privacy_options_button:hover{
 	opacity: 0.8;
 }
+
+/*realated to the sign up / sign in modal*/
+.sign_up_or_login_grid{
+	width: 50%;
+	margin-bottom: 30px;
+	text-align: center;
+}
+.facebook_login_button{
+	padding: 5px 10px;
+	background-color: #3B5998;
+	border-radius: 3px;
+	border-bottom:3px solid #0a6568;
+	color:white;
+}
+.twitter_login_button{
+	background-color: #4099FF;
+	padding: 5px 10px;
+	border-radius: 3px;
+	border-bottom:3px solid #0a6568;
+	color:white;
+}
+.github_login_button{
+	margin-top: 10px;
+	background-color: #000000;
+	padding: 5px 10px;
+	border-radius: 3px;
+	border-bottom:3px solid #0a6568;
+	color:white;
+}
