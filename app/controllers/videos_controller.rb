@@ -19,7 +19,12 @@ class VideosController < ApplicationController
 	end
 
 	def index
-		
+		puts params[:title]
+		@videos = Video.search_for_videos(params[:title], params[:category])
+
+		respond_to do |format|
+			format.js
+		end
 	end
 
 end
