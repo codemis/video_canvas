@@ -1,30 +1,49 @@
 
-<div id="voteSuckas"><%= link_to image_tag("vote.png", height: "169px", width: "169px", class: "fright"), "http://railsrumble.com/entries/213-video-canvas" %>
- 
+<div id="voteSuckas"><%= link_to image_tag("vote.png", height: "169px", width: "169px"), "http://railsrumble.com/entries/213-video-canvas" %>
+</div>
+
+
 
   <div class="homeContainer">
-    
-    <div class="demo_video">
 
-      <div id="text-fade-container">
-	<p class="tagline fleft">Youtube just got a little more </p>
-	<div id="text-fade-content">
-	  <span>mustaches.</span>
-	  <span>fart clouds.</span>
-	  <span>stick figures.</span>
-	  <span>unibrows.</span>
-	  <span>angry eyes.</span>
-	  <span>lols.</span>
-	  <span>squiggly smell lines.</span>
-	  <span>crazy hats.</span>
-	  <span>eye patches.</span>
-	  <span>lightening bolts.</span>
-	  <span>hearts.</span>
-	</div>
-	<div class="clear"></div>
-      </div>
+
+
+    
+   	<div class="demo_video">
+   		<div class="exampleVideo">
+		<div id="doodles">
+			<div id="overlay">
+			<%= image_tag("mustache.png", height: "741px", width: "1024") %>
+			</div>
+		</div>
+
+		<div class="wrapper1">
+		     <div id="text-fade-container">
+					<p class="tagline fleft">Youtube just got a little more </p>
+					<div id="text-fade-content">
+					  <span>mustaches.</span>
+					  <span>fart clouds.</span>
+					  <span>stick figures.</span>
+					  <span>unibrows.</span>
+					  <span>angry eyes.</span>
+					  <span>lols.</span>
+					  <span>squiggly smell lines.</span>
+					  <span>crazy hats.</span>
+					  <span>eye patches.</span>
+					  <span>lightening bolts.</span>
+					  <span>hearts.</span>
+					</div>
+			<div class="clear"></div>
+		</div>
+    
 
       <iframe width="640" height="360" src="//www.youtube.com/embed/sBWPCvdv8Bk?autoplay=1&controls=0&showinfo=0&rel=0" frameborder="0" allowfullscreen></iframe>
+
+ 	</div><!-- end wrapper1 -->
+
+ 	</div><!-- end exampleVideo -->
+
+
       <div class="intro_text">
 	<strong>Now your turn.</strong> Start a 
 	<%= link_to "new canvas", "#", {:class => 'btn choose_video_modal '} %>  
