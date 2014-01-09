@@ -5,12 +5,12 @@ SiteConfig.load
 namespace :db do
   desc "Fill in categories table with category data from YouTube"
   task :update_youtube_categories => :environment do
-    if !SiteConfig.respond_to?(:youtube_apikey)
-      raise "You need a YouTube API key in your config/site.yml file!"
-      exit
-    end
+    # if !SiteConfig.respond_to?(:youtube_apikey)
+    #   raise "You need a YouTube API key in your config/site.yml file!"
+    #   exit
+    # end
 
-    url = "https://www.googleapis.com/youtube/v3/videoCategories?part=snippet&regionCode=US&key=#{SiteConfig.youtube_apikey}"
+    url = "https://www.googleapis.com/youtube/v3/videoCategories?part=snippet&regionCode=US&key=#{ENV["YOUTUBE_APIKEY"]}"
     response = Net::HTTP.get_response(URI(url))
     data = JSON.parse(response.body)
     data['items'].each do |category|
