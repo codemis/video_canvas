@@ -50,6 +50,7 @@ gem 'capistrano', '~> 2.15'
 
 group :production do
   gem 'therubyracer'
+  gem 'rails_12factor'
 end
 
 # Use ActiveModel has_secure_password
