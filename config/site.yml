@@ -1,0 +1,18 @@
+defaults: &DEFAULTS
+  :twitter_id: ENV["TWITTER_ID"]
+  :twitter_secret: ENV["TWITTER_SECRET"]
+  :github_id: ENV["GITHUB_ID"]
+  :github_secret: ENV["GITHUB_SECRET"]
+  :facebook_id: ENV["FACEBOOK_ID"]
+  :facebook_secret: ENV["FACEBOOK_SECRET"]
+  :youtube_apikey: ENV["YOUTUBE_APIKEY"]
+  
+
+development:
+  <<: *DEFAULTS
+
+test:
+  <<: *DEFAULTS
+
+production:
+  <<: *DEFAULTS

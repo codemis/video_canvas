@@ -17,4 +17,4 @@
 .DS_Store
 
 # Ignore our secret keys config
-/config/site.yml
+
